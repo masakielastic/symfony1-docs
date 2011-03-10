@@ -6,11 +6,7 @@
 バックエンドの作成
 ------------------
 
-<<<<<<< HEAD
 一番最初のステップは `backend` アプリケーションを作ることです。記憶力のよい方は `generate:app` タスクでこれを行う方法を覚えていることでしょう。
-=======
-一番最初のステップは `backend` アプリケーションを作ることです。記憶力が良ければ、`generate:app` タスクでこれを行う方法を覚えていることでしょう。
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
 
     $ php symfony generate:app backend
 
@@ -23,17 +19,12 @@
 `propel:data-load`
 </propel>
 <doctrine>
-<<<<<<< HEAD
 `doctrine:data-load`
-=======
-'doctrine:data-load`
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
 </doctrine> タスクでデータフィクスチャをリロードしようとしても、動かないでしょう。`JobeetJob::save()` メソッドは `frontend` アプリケーションの ~`app.yml`~ 設定ファイルにアクセスすることが必要とするからです。今は2つのアプリケーションがあるので、symfony は最初に見つかるアプリケーションである `backend` アプリケーションを使います。
 
 しかし8日目でみたように、異なるレベルで設定を変更できます。`apps/frontend/config/app.yml` ファイルの内容を `config/app.yml` ファイルに移動させることで、すべてのアプリケーションの間で設定は共有され問題は解決されます。アドミンジェネレータでモデルクラスを広範囲で使うので、今変更しましょう。また、バックエンドアプリケーションの `app.yml` ファイルで定義される変数が必要になります。
 
 <propel>
-<<<<<<< HEAD
 >**TIP**
 >`propel:data-load` タスクは `--application` オプションもとります。ですので、あるアプリケーションから特定の設定が必要な場合、次のように実行します。
 >
@@ -43,17 +34,6 @@
 >**TIP**
 >`doctrine:data-load` タスクは `--application` オプションもとります。ですので、あるアプリケーションから特定の設定が必要な場合、次のように実行します。
 >
-=======
->**TIP**
->`propel:data-load` タスクは `--application` オプションもとります。ですので、あるアプリケーションから特定の設定が必要な場合、次のように実行します:
->
->     $ php symfony propel:data-load --application=frontend
-</propel>
-<doctrine>
->**TIP**
->`doctrine:data-load` タスクは `--application` オプションもとります。ですので、あるアプリケーションから特定の設定が必要な場合、次のように実行します。
->
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
 >     $ php symfony doctrine:data-load --application=frontend
 </doctrine>
 
@@ -63,7 +43,6 @@
 フロントエンドアプリケーションでは、モデルクラスにもとづいた基本的な CRUD モジュールをブートストラップするために、
 <propel>
 `propel:generate-module` タスクを使いました。バックエンドでは、モデルクラスの完全なバックエンドインターフェイスを生成する `propel:generate-admin` タスクを使います。
-<<<<<<< HEAD
 
     $ php symfony propel:generate-admin backend JobeetJob --module=job
     $ php symfony propel:generate-admin backend JobeetCategory
@@ -77,21 +56,6 @@
     
 </doctrine>
 
-=======
-
-    $ php symfony propel:generate-admin backend JobeetJob --module=job
-    $ php symfony propel:generate-admin backend JobeetCategory
-
-</propel>
-<doctrine>
-`doctrine:generate-module` タスクを使いました。バックエンドでは、モデルクラスの完全なバックエンドインターフェイスを生成する `doctrine:generate-admin` タスクを使います。
-
-    $ php symfony doctrine:generate-admin backend JobeetJob --module=job
-    $ php symfony doctrine:generate-admin backend JobeetCategory
-    
-</doctrine>
-
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
 これら2つのコマンドは `JobeetJob` と `JobeetCategory` モデルクラスに対してそれぞれ `job` と `category` モジュールを生成します。
 
 `--module` オプションを追加すると、タスクによってデフォルトで生成される `module` の名前がオーバーライドされます (そうしなければ `JobeetJob` クラスに対して `jobeet_job` になります)。
@@ -118,23 +82,12 @@
 <propel>
  `sfPropelRouteCollection` であるのは驚くことではありません。
 </propel>
-<<<<<<< HEAD
-
 <doctrine>
  `sfDoctrineRouteCollection` であるのは驚くことではありません。
 </doctrine>
 
 ルートは以前には見かけなかったオプションも定義します。
 
-=======
-
-<doctrine>
- `sfDoctrineRouteCollection` であるのは驚くことではありません。
-</doctrine>
-
-ルートは以前には見かけなかったオプションも定義します。
-
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
   * `prefix_path`: 生成されるルートの前につけられるパスを定義する (たとえば、編集ページは `/job/1/edit` のようになる)。
   * `column`: オブジェクトを参照するリンク用の URL で使うテーブルのカラムを定義する
   * `with_wildcard_routes`: アドミンインターフェイスは典型的な CRUD オペレーション以上の機能を持つため、このオプションでルートの編集なしにさらなるオブジェクトやコレクションアクションを定義することを許可します。
@@ -322,19 +275,11 @@ symfony のキャッシュ
 >キャッシュファイルの自動再生成は開発環境でのみ行われます。運用環境では、`cache:clear` タスクを使ってキャッシュを手動でクリアする必要があります。
 
 <propel>
-<<<<<<< HEAD
 >**NOTE**
 >`with_show` パラメータに効果はありません。このパラメータは `propel:generate-module` タスクを用いた 「通常の」モジュールのときにのみ効果があります。
 </propel>
 <doctrine>
 >**NOTE**
-=======
->**NOTE**
->`with_show` パラメータに効果はありません。このパラメータは `propel:generate-module` タスクを用いた 「通常の」モジュールのときにのみ効果があります。
-</propel>
-<doctrine>
->**NOTE**
->>>>>>> 5e579f23aa64ff71c2b4f953ff319bd4071b24c8
 >`with_show` パラメータに効果はありません。このパラメータは `doctrine:generate-module` タスクを用いた 「通常の」モジュールのときにのみ効果があります。
 </doctrine>
 
@@ -478,7 +423,7 @@ list は異なるレイアウトで表示されます。デフォルトのレイ
 
 ### 「バーチャル」カラム
 
-この設定によって、`%%category_id%%` セグメントはカテゴリの主キーによって置き換えられます。しかし、カテゴリの名前を表示するほうがより分かりやすくなるでしょう。
+この設定によって、`%%category_id%%` セグメントはカテゴリの主キーによって置き換えられます。しかし、カテゴリの名前を表示するほうがよりわかりやすくなるでしょう。
 
 `%%` の表記を使うときは、変数はデータベーススキーマの実際にカラムに一致する必要はありません。アドミンジェネレータはモデルクラスに関連する getter が見つかることだけを必要とします。
 
