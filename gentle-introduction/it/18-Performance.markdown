@@ -1,9 +1,9 @@
 Capitolo 18 - Prestazioni
 =========================
 
-Se ci si aspetta che il proprio sito web possa attirare molte visite i problemi di prestazioni e di ottimizzazione dovrebbero essere argomenti trattati a fondo durante la fase di sviluppo. State sicuri che quella delle prestazioni è stata sempre una delle principali preoccupazioni per gli sviluppatori del core di symfony.
+Se ci si aspetta che il proprio sito web possa attirare molte visite i problemi di prestazioni e di ottimizzazione dovrebbero essere argomenti trattati a fondo durante la fase di sviluppo. State sicuri che quella delle prestazioni è stata sempre una delle principali preoccupazioni per gli sviluppatori del nucleo di symfony.
 
-Mentre i vantaggi ottenuti dall'accelerazione del processo di sviluppo comportano un piccolo overhead, gli sviluppatori del core di symfony sono sempre stati a conoscenza dei requisiti relativi alle prestazioni. Proprio per questo ogni classe e ogni metodo son stati analizzati e ottimizzati per essere più veloci possibile. Il piccolo overhead, che può essere misurato confrontando il tempo necessario a visualizzare un "hello, world" con e senza symfony, è minimo. Conseguentemente il framework è scalabile e reagisce positivamente agli stress test. Come ultima prova alcuni siti a [estremamente](http://sf-to.org/answers) [alto](http://sf-to.org/delicious) [traffico](http://sf-to.org/dailymotion) (questo significa, siti web con milioni di utenti attivi e molti server che erogano interazioni Ajax) usano symfony e sono molto soddisfatti delle sue prestazioni.
+Mentre i vantaggi ottenuti dall'accelerazione del processo di sviluppo comportano un piccolo overhead, gli sviluppatori del team di symfony sono sempre stati a conoscenza dei requisiti relativi alle prestazioni. Proprio per questo ogni classe e ogni metodo son stati analizzati e ottimizzati per essere più veloci possibile. Il piccolo overhead, che può essere misurato confrontando il tempo necessario a visualizzare un "hello, world" con e senza symfony, è minimo. Conseguentemente il framework è scalabile e reagisce positivamente agli stress test. Come ultima prova alcuni siti a [estremamente](http://sf-to.org/answers) [alto](http://sf-to.org/delicious) [traffico](http://sf-to.org/dailymotion) (questo significa, siti web con milioni di utenti attivi e molti server che erogano interazioni Ajax) usano symfony e sono molto soddisfatti delle sue prestazioni.
 
 Tuttavia i siti ad alto traffico molte volte si possono permettere di espandere la propria server farm e di fare upgrade hardware man mano che le risorse vengono utilizzate. Quando non si hanno le risorse per agire in questo modo, o quando si vuole essere certi di avere a disposizione l'intera potenza del framework, esistono degli accorgimenti per rendere ulteriormente più veloce la propria applicazione symfony. Questo capitolo elenca alcune delle ottimizzazioni raccomandate per le prestazioni a tutti i livelli del framework che sono principalmente per utenti avanzati. Alcuni di essi sono già stati citati nei capitoli precedenti, è utile tuttavia averli tutti assieme in un unico posto.
 
@@ -26,7 +26,7 @@ D'altro canto ci si deve assicurare di aver disattivato qualsiasi strumento di d
 -
 
 >**TIP**
->Quando un server non è abbastanza è sempre possibile aggiungerne un secondo e utilizzare un sistema di bilanciamento del carico. Ammesso che la cartella `uploads/` sia condivisa tra le macchine e si utilizzi il database per lo storage delle sessioni, symfony risponderà allo stesso modo in un'architettura bilanciata.
+>Quando un server non basta, è sempre possibile aggiungerne un secondo e utilizzare un sistema di bilanciamento del carico. Ammesso che la cartella `uploads/` sia condivisa tra le macchine e si utilizzi il database per lo storage delle sessioni, symfony risponderà allo stesso modo in un'architettura bilanciata.
 
 Ottimizzare il modello
 ----------------------
@@ -35,7 +35,7 @@ In symfony lo strato del modello ha la reputazione di essere la parte più lenta
 
 ### Ottimizzare l'integrazione di Propel o Doctrine
 
-L'inizializzazione dello strato del modello (le classi del core dell'ORM) richiede un po' di tempo per la necessità di caricare alcune classi e creare diversi oggetti. Comunque, grazie a come symfony integra tutti e due gli ORM, questo processo di inizializzazione si verifica solo quando un'azione necessita realmente del modello e questo viene fatto più tardi possibile. Le classi dell'ORM vengono inizializzate solo quando un oggetto del modello auto generato è oggetto di auto-caricamento.
+L'inizializzazione dello strato del modello (le classi del nucleo dell'ORM) richiede un po' di tempo per la necessità di caricare alcune classi e creare diversi oggetti. Comunque, grazie a come symfony integra tutti e due gli ORM, questo processo di inizializzazione si verifica solo quando un'azione necessita realmente del modello e questo viene fatto più tardi possibile. Le classi dell'ORM vengono inizializzate solo quando un oggetto del modello auto generato è oggetto di auto-caricamento.
 
 Se l'intera applicazione non richiede l'utilizzo dello strato del modello è possibile evitare l'inizializzazione del `sfDatabaseManager` disabilitando completamente lo strato in `settings.yml`:
 
@@ -46,7 +46,7 @@ Se l'intera applicazione non richiede l'utilizzo dello strato del modello è pos
         
 #### Miglioramenti di Propel
 
-Le classi generate del modello (in `lib/model/om/`) sono già ottimizzate non contengono commenti, beneficiano del sistema di auto-caricamento. Fare affidamento sull'auto-caricamento invece che sull'inclusione manuale dei file significa che le classi vengono caricate solo se realmente necessarie. Quindi nel caso in cui una classe del modello non fosse necessario l'auto-caricamento permette di risparmiare tempo di esecuzione, cosa non permessa dal metodo alternativo in cui si utilizza `include`. Stesso discorso per i commenti, documentano l'utilizzo dei metodi generati ma allungano i file del modello risultando in un minore overhead su dischi lenti. Dato che i nomi dei metodi generati sono piuttosto espliciti, i commenti sono disabilitati per impostazione predefinita.
+Le classi generate del modello (in `lib/model/om/`) sono già ottimizzate: non contengono commenti e beneficiano del sistema di auto-caricamento. Fare affidamento sull'auto-caricamento invece che sull'inclusione manuale dei file significa che le classi vengono caricate solo se realmente necessarie. Quindi nel caso in cui una classe del modello non fosse necessario l'auto-caricamento permette di risparmiare tempo di esecuzione, cosa non permessa dal metodo alternativo in cui si utilizza `include`. Stesso discorso per i commenti, documentano l'utilizzo dei metodi generati ma allungano i file del modello risultando in un minore overhead su dischi lenti. Dato che i nomi dei metodi generati sono piuttosto espliciti, i commenti sono disabilitati per impostazione predefinita.
 
 Queste due ottimizzazioni sono specifiche per symfony, è possibile tornare sui valori predefiniti di Propel modificando due impostazioni nel file `propel.ini` come segue:
 
@@ -68,18 +68,18 @@ Listato 18-1 - Limitare il numero di risultati restituito da un Criteria
     [php]
     $c = new Criteria();
     $c->setOffset(10);  // Offset del primo record restituito
-    $c->setLimit(10);   // Numero di record restituito
+    $c->setLimit(10);   // Numero di record restituiti
     $articles = ArticlePeer::doSelect($c);
 
 Questo può essere automatizzato utilizzando un sistema di paginazione. L'oggetto `sfPropelPager` gestisce automaticamente l'offset e il limite di una query di Propel per idratare solamente gli oggetti richiesti da una pagina specifica.
 
-### Minimizzare il numero di query con le Join
+### Minimizzare il numero di query con le join
 
 Durante lo sviluppo di un'applicazione è bene tenere sott'occhio il numero delle query inviate al database da ogni singola richiesta. La web debug toolbar visualizza il numero delle query per ogni pagina, cliccando sulla piccola icona del database è possibile analizzare il codice SQL di tutte queste query. Se il numero delle query cresce in modo anomalo è giunto il momento di valutare l'utilizzo di alcune Join.
 
-Prima di analizzare i metodi di Join rivediamo cosa accade quando si itera su un array di oggetti usando un getter di Propel per ottenere i dettagli di una classe relazionata come nel listato 18-2. Questo esempio suppone che lo schema descriva una tabella `article` con una chiave esterna a una tabella `author`.
+Prima di analizzare i metodi di join rivediamo cosa accade quando si itera su un array di oggetti usando un getter di Propel per ottenere i dettagli di una classe relazionata come nel listato 18-2. Questo esempio suppone che lo schema descriva una tabella `article` con una chiave esterna a una tabella `author`.
 
-Listato 18-2 - Recuperare dettagli su un classe relazionata in un loop
+Listato 18-2 - Recuperare dettagli su un classe relazionata in un ciclo
 
     [php]
     // Nell'azione con Propel
@@ -114,7 +114,7 @@ Listato 18-3 - Getter su chiavi esterne richiedono una query a database
 
 Quindi la pagina del listato 18-2 richiederà in totale 11 query: una necessaria alla creazione dell'array di oggetti `Article` più le dieci query necessarie per creare un oggetto `Author` alla volta. Si tratta di molte query per la sola visualizzazione di una lista di articoli con i relativi autori.
 
-####Come ottimizzare le query con Propel
+#### Come ottimizzare le query con Propel
 
 Se si stesse usando semplice SQL non dovrebbe essere molto difficile ridurre il numero di query a una sola recuperando le colonne della tabella `article` e quelle della tabella `author` nello stesso momento. Questo è esattamente il comportamento del metodo `doSelectJoinAuthor()` della classe `ArticlePeer`. Questo metodo invoca una query leggermente più complessa della semplice chiamata `doSelect()`, le colonne aggiuntive del result set permettono a Propel di idratare sia gli oggetti `Article` che gli oggetti `Author` relazionati. Il codice del listato 18-4 mostra esattamente lo stesso risultato del listato 18-2 ma richiede una singola query al database invece che 11 risultando così più veloce.
 
@@ -192,7 +192,7 @@ Anche utilizzando Propel gli oggetti vengono già idratati, quindi non c'è ness
 Listato 18-6 - Preparare un array nell'azione è superfluo se già se ne possiede uno
 
     [php]
-    // In the action
+    // Nell'azione
     $articles = ArticlePeer::doSelect(new Criteria());
     $titles = array();
     foreach ($articles as $article)
@@ -201,7 +201,7 @@ Listato 18-6 - Preparare un array nell'azione è superfluo se già se ne possied
     }
     $this->titles = $titles;
 
-    // In the template
+    // Nel template
     <ul>
     <?php foreach ($titles as $title): ?>
       <li><?php echo $title ?></li>
@@ -213,12 +213,12 @@ Il problema relativo a questo codice è dato dal fatto che l'idratazione è già
 Listato 18-7 - Utilizzare un array di oggetti esonera dalla creazione di un array temporaneo
 
     [php]
-    // In the action
+    // Nell'azione
     $this->articles = ArticlePeer::doSelect(new Criteria());
-    // With Doctrine
+    // Con Doctrine
     $this->articles = Doctrine::getTable('Article')->findAll();
 
-    // In the template
+    // Nel template
     <ul>
     <?php foreach ($articles as $article): ?>
       <li><?php echo $article->getTitle() ?></li>
@@ -230,21 +230,21 @@ Se realmente si ha la necessità di costruire un array temporaneo perché è nec
 Listato 18-8 - Utilizzare un metodo custom per costruire un array temporaneo
 
     [php]
-    // In the action
+    // Nell'azione
     $this->articles = ArticlePeer::getArticleTitlesWithNbComments();
 
-    // In the template
+    // Nel template
     <ul>
     <?php foreach ($articles as $article): ?>
       <li><?php echo $article['title'] ?> (<?php echo $article['nb_comments'] ?> comments)</li>
     <?php endforeach; ?>
     </ul>
 
-Sta poi allo sviluppatore costruire un metodo `getArticleTitlesWithNbComments()` performante nel modello, magari bypassando l'intero strato di astrazione dell'ORM e del database.
+Sta poi allo sviluppatore costruire un metodo `getArticleTitlesWithNbComments()` performante nel modello, magari aggirando l'intero strato di astrazione dell'ORM e del database.
 
-### Bypassare l'ORM
+### Aggirare l'ORM
 
-Quando realmente non si ha bisogno di oggetti ma solo di alcune colonne da varie tabelle, come nell'esempio precedente, si possono creare metodi specifici nel modello per bypassare completamente lo strato dell'ORM. Si può interrogare il database direttamente con PDO, per esempio, e restituire un array costruito sulla base delle proprie esigenze. listato 18-9 illustra quest'idea.
+Quando realmente non si ha bisogno di oggetti ma solo di alcune colonne da varie tabelle, come nell'esempio precedente, si possono creare metodi specifici nel modello per aggirare completamente lo strato dell'ORM. Si può interrogare il database direttamente con PDO, per esempio, e restituire un array costruito sulla base delle proprie esigenze. listato 18-9 illustra quest'idea.
 
 Listato 18-9 - Accesso diretto tramite PDO per metodi ottimizzati nel modello, in `lib/model/ArticlePeer.php`
 
@@ -327,7 +327,7 @@ Dopo aver aggiunto un indice allo schema andrà aggiunto anche al database stess
 >**TIP**
 >L'utilizzo degli indici tende a rendere più veloci le query di tipo `SELECT` mentre saranno più lente `INSERT`, `UPDATE` e `DELETE`. Inoltre i motori dei database utilizzano solo un indice a interrogazione e lo scelgono a ogni query basandosi su un'euristica interna. Aggiungere un indice a volte può essere controproducente in termini di prestazioni, è bene quindi verificarne il risultato.
 
-Se non diversamente specificato, in symfony ogni richiesta utilizza una singola connessione al database che viene chiusa alla fine della richiesta stessa. Si possono attivare le connessioni persistenti al database per utilizzare un pool di connessioni che restino aperte tra una query e l'altra impostando il parametro `persistent: true` nel file `databases.yml` come mostrato nel listato 18-11.
+Se non diversamente specificato, in symfony ogni richiesta utilizza una singola connessione al database, che viene chiusa alla fine della richiesta stessa. Si possono attivare le connessioni persistenti al database per utilizzare un pool di connessioni che restino aperte tra una query e l'altra impostando il parametro `persistent: true` nel file `databases.yml` come mostrato nel listato 18-11.
 
 Listato 18-11 - Abilitare il supporto per le connessioni persistenti al database, in `config/databases.yml`
 
@@ -340,14 +340,14 @@ Listato 18-11 - Abilitare il supporto per le connessioni persistenti al database
           password:    password
           persistent:  true      # Utilizza connessioni persistenti
 
-Questo può o meno migliorare le prestazioni generali del database in funzione di molti fattori. La documentazione sull'argomento è abbondante e facilmente reperibile su Internet. Anche qui è opportuno testare le prestazioni dell'applicazione prima e dopo il cambio di questa impostazione per verificarne l'impatto.
+Questo può o meno migliorare le prestazioni generali del database, in funzione di molti fattori. La documentazione sull'argomento è abbondante e facilmente reperibile su Internet. Anche qui è opportuno testare le prestazioni dell'applicazione prima e dopo il cambio di questa impostazione, per verificarne l'impatto.
 
 >**SIDEBAR**
 >Suggerimenti specifici per MySQL
 >
 >Molte impostazioni della configurazione di MySQL, situate nel file my.cnf, possono alterare le prestazioni del database. Assicurarsi di aver letto la [documentazione online](http://dev.mysql.com/doc/refman/5.0/en/option-files.html) su questo argomento.
 >
->Uno degli strumenti offerti da MySQL è il log delle query lente. Tutte le interrogazioni SQL che richiedono più tempo in secondi di `long_query_time` per essere eseguite (questa è un'impostazione che può essere modificata in `my.cnf`) vengono registrate in un file che è abbastanza difficile da analizzare manualmente ma che grazie al comando `mysqldumpslow` genera un sommario molto utile. Si tratta di un ottimo strumento per individuare le query che necessitano di ottimizzazione.
+>Uno degli strumenti offerti da MySQL è il log delle query lente. Tutte le interrogazioni SQL che richiedono più tempo in secondi di `long_query_time` per essere eseguite (questa è un'impostazione che può essere modificata in `my.cnf`) vengono registrate in un file che è abbastanza difficile da analizzare manualmente, ma che grazie al comando `mysqldumpslow` genera un sommario molto utile. Si tratta di un ottimo strumento per individuare le query che necessitano di ottimizzazione.
 
 Mettere a punto la vista
 ------------------------
@@ -388,9 +388,9 @@ La differenza inizia a farsi vedere quando una pagina include alcune dozzine di 
 
 ### Ignorare il template
 
-Solitamente una risposta è composta da un insieme di intestazioni e di contenuti. Alcune risposte però non necessitano di contenuto. Per esempio alcune interazioni Ajax richiedono solo alcune porzioni di dati dal server per alimentare un programma JavaScript che si occupa di aggiornare diverse parti di una pagina. Per questo tipo di risposte brevi un solo insieme di intestazioni è più veloce da trasmettere. Come visto nel capitolo 11 un azione può restiture anche solo un intestazione JSON. listato 18-12 propone un esempio dal capitolo 11.
+Solitamente una risposta è composta da un insieme di intestazioni e di contenuti. Alcune risposte però non necessitano di contenuto. Per esempio, alcune interazioni Ajax richiedono solo alcune porzioni di dati dal server, per alimentare un programma JavaScript che si occupa di aggiornare diverse parti di una pagina. Per questo tipo di risposte brevi, un solo insieme di intestazioni è più veloce da trasmettere. Come visto nel capitolo 11, un'azione può restiture anche solo un'intestazione JSON. Il listato 18-12 propone un esempio dal capitolo 11.
 
-Listato 18-12 - Esempio di azione che restituisce un intestazione JSON
+Listato 18-12 - Esempio di azione che restituisce un'intestazione JSON
 
     [php]
     public function executeRefresh()
@@ -401,9 +401,9 @@ Listato 18-12 - Esempio di azione che restituisce un intestazione JSON
       return sfView::HEADER_ONLY;
     }
 
-Questo esclude il template e il layout, la risposta può essere inviata singolarmente. Dato che contiene solamente intestazioni è più leggera e richiederà meno tempo per essere trasmessa all'utente.
+Questo esclude il template e il layout: la risposta può essere inviata singolarmente. Dato che contiene solamente intestazioni, è più leggera e richiederà meno tempo per essere trasmessa all'utente.
 
-Il capitolo 6 ha mostrato un altro modo per evitare il caricamento del template restituendo del testo come contenuto dall'azione. Questo infrange la separazione MVC ma può aumentare la velocità di risposta di un'azione in modo drastico. Verificare listato 18-13 per un esempio.
+Il capitolo 6 ha mostrato un altro modo per evitare il caricamento del template, restituendo del testo come contenuto dall'azione. Questo infrange la separazione MVC, ma può aumentare la velocità di risposta di un'azione in modo drastico. Verificare il listato 18-13 per un esempio.
 
 Listato 18-13 - Esempio di azione che restituisce direttamente testo come contenuto
 
@@ -416,18 +416,18 @@ Listato 18-13 - Esempio di azione che restituisce direttamente testo come conten
 Ottimizzare la cache
 --------------------
 
-Il capitolo 12 ha già descritto come mettere in cache porzioni di una risposta o la risposta completa. L'utilizzo della cache per le risposte rappresenta una miglioria sostanziale per le prestazioni e dovrebbe essere una delle prime ottimizzazioni da considerare. Per ottenere il massimo dal sistema della cache si consiglia di continuare la lettura, questa sezione svelerà alcuni accorgimenti a cui non si penserebbe.
+Il capitolo 12 ha già descritto come mettere in cache porzioni di una risposta o la risposta completa. L'utilizzo della cache per le risposte rappresenta una miglioria sostanziale per le prestazioni e dovrebbe essere una delle prime ottimizzazioni da considerare. Per ottenere il massimo dal sistema della cache, si consiglia di continuare la lettura: questa sezione svelerà alcuni accorgimenti a cui non si penserebbe.
 
 ### Invalidare selettivamente porzioni di cache
 
-Durante lo sviluppo di un'applicazione è necessario ripulire la cache in diverse situazioni:
+Durante lo sviluppo di un'applicazione, è necessario ripulire la cache in diverse situazioni:
 
   * Quando si crea una nuova classe: aggiungere una classe a una delle cartelle soggette ad auto-caricamento (una delle cartelle `lib/` del progetto) non è abbastanza perché symfony possa individuarla automaticamente in ambienti non di sviluppo. È necessario svuotare la cache della configurazione dell'auto-caricamento, in modo che symfony analizzi nuovamente tutte le cartelle indicate dal file `autoload.yml` e referenzi la posizione delle classi include le nuove.
   * Quando si cambia la configurazione in produzione: la configurazione viene processata solo durante la prima richiesta in produzione. Le richieste successive utilizzano invece la versione memorizzata in cache. Quindi una modifica nella configurazione dell'ambiente di produzione (o qualunque ambiente in cui il debug è impostato a `false`) non ha effetto fino alla cancellazione della versione memorizzata in cache del file.
   * Quando si modifica un template in un ambiente dove la cache per i template è abilitata: i template validi dalla cache vengono sempre utilizzati al posto dei template in produzione, quindi una modifica a un template viene ignorata fino a quando la cache non viene cancellata o diventa obsoleta.
   * Quando si aggiorna un'applicazione con il comando `project:deploy`: questo caso solitamente comprende le tre modifiche appena viste.
 
-Il problema della cancellazione dell'intera cache è rappresentato dal fatto che la richiesta successiva richiederà un tempo più lungo per essere processata perché la cache della configurazione deve essere rigenerata. Inoltre i template non modificati verranno anch'essi rimossi dalla cache perdendo i benefici delle richieste precedenti.
+Il problema della cancellazione dell'intera cache è rappresentato dal fatto che la richiesta successiva richiederà un tempo più lungo per essere processata, perché la cache della configurazione deve essere rigenerata. Inoltre i template non modificati verranno anch'essi rimossi dalla cache, perdendo i benefici delle richieste precedenti.
 
 Questo significa che è una buona idea rimuovere dalla cache solamente i file che realmente necessitano di essere rigenerati. Utilizzare le opzioni del task `cache:clear` per definire un sottoinsieme di file della cache da rimuovere come dimostrato nel listato 18-14.
 
@@ -442,22 +442,22 @@ Listato 18-14 - Rimuovere solo parti specifiche della cache
     // Rimuovere solo la cache dei file di configurazione dell'applicazione frontend
     $ php symfony cache:clear frontend config
 
-Si possono rimuovere i file anche manualmente nella cartella `cache/` o eliminare i file di cache dei template selettivamente dall'azione con il metodo `$cacheManager->remove()` come descritto nel capitolo 12.
+Si possono rimuovere i file anche manualmente nella cartella `cache/` o eliminare i file di cache dei template selettivamente dall'azione, con il metodo `$cacheManager->remove()`, come descritto nel capitolo 12.
 
 Tutte queste tecniche minimizzeranno l'impatto negativo sulle prestazioni di ognuna delle modifiche elencate precedentemente.
 
 >**TIP**
->Quando si aggiorna symfony la cache viene rimossa automaticamente senza intervento manuale (se il parametro `check_symfony_version` è impostato a `true` nel file `settings.yml`).
+>Quando si aggiorna symfony, la cache viene rimossa automaticamente senza intervento manuale (se il parametro `check_symfony_version` è impostato a `true` nel file `settings.yml`).
 
 ### Generare pagine in cache
 
-Quando si mette in produzione una nuova applicazione la cache dei template è vuota. È necessario aspettare che gli utenti visitino una pagina perché essa venga inserita in cache. Nei rilasci più critici, l'overhead del processo di una pagina non è accettabile e i benefici della cache devono essere disponibili già alla prima richiesta.
+Quando si mette in produzione una nuova applicazione, la cache dei template è vuota. È necessario aspettare che gli utenti visitino una pagina perché essa venga inserita in cache. Nei rilasci più critici, l'overhead del processo di una pagina non è accettabile e i benefici della cache devono essere disponibili già alla prima richiesta.
 
 La soluzione è rappresentata dalla visita delle pagine dell'applicazione nell'ambiente di stage (dove la configurazione è simile a quella di produzione) per generare la cache dei template e poi trasferire l'applicazione con la cache in produzione.
 
-Per visitare le pagine in modo automatico un'opzione è creare uno script di shell che analizza una lista di URL esterni con un browser (curl per esempio). Esiste però una soluzione migliore e più veloce: uno script PHP che utilizza l'oggetto `sfBrowser` già visto al capitolo 15.  Si tratta di un browser interno scritto in PHP (e utilizzato da `sfTestFunctional` per i test funzionali). Accetta un URL esterno e restituisce una risposta, ma la cosa interessante è che scatena la creazione della cache del template proprio come un browser tradizionale. Dato che inizializza symfony solamente una volta e non utilizza lo strato di trasporto HTTP questo metodo risulta molto veloce.
+Per visitare le pagine in modo automatico, un'opzione è quella di creare uno script di shell che analizza una lista di URL esterni con un browser (curl per esempio). Esiste però una soluzione migliore e più veloce: uno script PHP che utilizza l'oggetto `sfBrowser` già visto al capitolo 15.  Si tratta di un browser interno scritto in PHP (e utilizzato da `sfTestFunctional` per i test funzionali). Accetta un URL esterno e restituisce una risposta, ma la cosa interessante è che scatena la creazione della cache del template, proprio come un browser tradizionale. Dato che inizializza symfony solamente una volta e non utilizza lo strato di trasporto HTTP, questo metodo risulta molto veloce.
 
-Listato 18-15 mostra uno script d'esempio utilizzato per generare cache dei template nell'ambiente di stage. Avviarlo chiamando `php generate_cache.php`.
+Il listato 18-15 mostra uno script d'esempio utilizzato per generare cache dei template nell'ambiente di stage. Avviarlo chiamando `php generate_cache.php`.
 
 Listato 18-15 - Generare la cache dei template, in `generate_cache.php`
 
@@ -495,15 +495,15 @@ I benefici offerti dall'utilizzo dello storage SQLite per la cache dei template 
 
 ### Aggirare symfony
 
-Forse il modo migliore per velocizzare symfony è quello di aggirarlo completamente... questo è solo in parte per scherzo. Alcune pagine non cambiano e non hanno la necessità di essere riprocessate dal framework a ogni richiesta. La cache dei template viene già utilizzata per accelerare la consegna delle pagine, ma si basa ancora su symfony.
+Forse il modo migliore per velocizzare symfony è quello di aggirarlo completamente... questo è solo in parte uno scherzo. Alcune pagine non cambiano e non hanno la necessità di essere riprocessate dal framework a ogni richiesta. La cache dei template viene già utilizzata per accelerare la consegna delle pagine, ma si basa ancora su symfony.
 
-Un paio di suggerimenti descritti nel capitolo 12 permettono di aggirare symfony totalmente per alcune pagine. Il primo coinvolge l'utilizzo delle intestazioni HTTP 1.1 per chiedere ai proxy e ai browser client di mettere in cache le pagine in modo autonomo, così non le richiederanno la prossima volta che la pagina sarà necessaria. Il secondo suggerimento è la super fast cache (automatizzata dal plug-in `sfSuperCachePlugin`), che consiste nel memorizzare una copia della risposta nella cartella `web/`, modificando le regole di rewrite per fare in modo che Apache cerchi una versione in cache prima di inoltrare la richiesta a symfony.
+Un paio di suggerimenti descritti nel capitolo 12 permettono di aggirare symfony totalmente per alcune pagine. Il primo coinvolge l'utilizzo delle intestazioni HTTP 1.1 per chiedere ai proxy e ai browser client di mettere in cache le pagine in modo autonomo, così non le richiederanno la prossima volta che la pagina sarà necessaria. Il secondo suggerimento è la super fast cache (automatizzata dal plugin `sfSuperCachePlugin`), che consiste nel memorizzare una copia della risposta nella cartella `web/`, modificando le regole di rewrite per fare in modo che Apache cerchi una versione in cache prima di inoltrare la richiesta a symfony.
 
 Tutti e due questi metodi sono molto efficaci e, anche se sono applicabili solo a pagine statiche, si fanno carico della gestione di queste pagine senza coinvolgere symfony, permettendo così al server di essere completamente disponibile per le richieste più complesse.
 
 ### Mettere in cache il risultato di una chiamata a una funzione
 
-Se una funzione non utilizza valori dipendenti dal contesto o non casuali, chiamandola due volte con gli stessi parametri dovrebbe fornire lo stesso risultato. Questo significa che la seconda chiamata potrebbe davvero essere evitata nel caso un cui si fosse memorizzato il primo risultato. Questo è esattamente ciò che la classe `sfFunctionCache` si occupa di fare. Questa classe ha un metodo `call()` che si aspetta un callable e un array di parametri come argomenti. Quando invocato questo metodo crea un hash md5 con tutti gli argomenti e cerca nella cache una chiave denominata con quell'hash. Se la chiave viene trovata la funzione restituisce il risultato memorizzato nella cache. Altrimenti `sfFunctionCache` esegue la funzione, memorizza il risultato nella cache e lo restituisce. In questo modo la seconda esecuzione del listato 18-16 sarà più veloce della prima.
+Se una funzione non utilizza valori dipendenti dal contesto o non casuali, chiamandola due volte con gli stessi parametri dovrebbe fornire lo stesso risultato. Questo significa che la seconda chiamata potrebbe davvero essere evitata nel caso un cui si fosse memorizzato il primo risultato. Questo è esattamente ciò che la classe `sfFunctionCache` si occupa di fare. Questa classe ha un metodo `call()` che si aspetta un callable e un array di parametri. Quando invocato questo metodo crea un hash md5 con tutti i parametri e cerca nella cache una chiave denominata con quell'hash. Se la chiave viene trovata, la funzione restituisce il risultato memorizzato nella cache. Altrimenti, `sfFunctionCache` esegue la funzione, memorizza il risultato nella cache e lo restituisce. In questo modo, la seconda esecuzione del listato 18-16 sarà più veloce della prima.
 
 Listato 18-16 - Mettere in cache il risultato di una funzione
 
@@ -513,7 +513,7 @@ Listato 18-16 - Mettere in cache il risultato di una funzione
     $result1 = $fc->call('cos', array(M_PI));
     $result2 = $fc->call('preg_replace', array('/\s\s+/', ' ', $input));
 
-Il costruttore della classe `sfFunctionCache` si aspetta un oggetto di tipo cache. Il primo argomento del metodo `call()` deve essere un callable, quindi può essere il nome di una funzione, un array contenente il nome di una classe e il nome di un metodo statico oppure un array con il nome di un oggetto e il nome di un metodo pubblico. Lo stesso vale per l'altro parametro del metodo `call()`, si tratta di un array  di argomenti che verranno passati al callable.
+Il costruttore della classe `sfFunctionCache` si aspetta un oggetto di tipo cache. Il primo parametro del metodo `call()` deve essere un callable, quindi può essere il nome di una funzione, un array contenente il nome di una classe e il nome di un metodo statico oppure un array con il nome di un oggetto e il nome di un metodo pubblico. Lo stesso vale per l'altro parametro del metodo `call()`, si tratta di un array di parametri che verranno passati al callable.
 
 >**CAUTION**
 >Se si utilizza un oggetto cache basato su file come nell'esempio è consigliabile utilizzare una cartella all'interno della cartella `cache/`, così facendo verrà svuotata automaticamente dal task `cache:clear`. Se si memorizza la cache della funzione da qualche altra parte non verrà rimossa automaticamente quando si svuoterà la cache utilizzando la linea di comando.
@@ -582,7 +582,7 @@ Listato 18-20 - Disabilitare funzionalità di sicurezza, in `frontend/config/fil
 
 Alcune funzionalità sono utili solamente nell'ambiente di sviluppo, non vanno quindi attivate in produzione. Questa è già la situazione standard dato che l'ambiente di produzione di symfony è totalmente ottimizzato per le migliori prestazioni. Tra tutte le funzionalità di sviluppo che hanno un impatto sulle prestazioni, la modalità di debug è sicuramente la più severa. Come per i log di symfony la funzionalità è già disabilitata nell'ambiente di produzione.
 
-Ci si potrebbe chiedere come ottenere informazioni sulle richieste fallite nell'ambiente di produzione se il log è disabilitato, facendo notare anche che i problemi non si manifestano solo durante lo sviluppo. Fortunatamente symfony può utilizzare il plugin `sfErrorLoggerPlugin` che lavora in background nell'ambiente di produzione e registra i dettagli degli errori 404 e 500 in un database. È molto più veloce della funzionalità di log su file dato che i metodi del plug-in vengono invocati solamente quando una richiesta fallisce, mentre il meccanismo di log, se attivo, aggiunge un overhead non indifferente, indipendentemente dal livello impostato. Controllare le istruzioni di installazione e il [manuale](http://plugins.symfony-project.org/plugins/sfErrorLoggerPlugin).
+Ci si potrebbe chiedere come ottenere informazioni sulle richieste fallite nell'ambiente di produzione se il log è disabilitato, facendo notare anche che i problemi non si manifestano solo durante lo sviluppo. Fortunatamente symfony può utilizzare il plugin `sfErrorLoggerPlugin` che lavora in background nell'ambiente di produzione e registra i dettagli degli errori 404 e 500 in un database. È molto più veloce della funzionalità di log su file dato che i metodi del plugin vengono invocati solamente quando una richiesta fallisce, mentre il meccanismo di log, se attivo, aggiunge un overhead non indifferente, indipendentemente dal livello impostato. Controllare le istruzioni di installazione e il [manuale](http://plugins.symfony-project.org/plugins/sfErrorLoggerPlugin).
 
 >**TIP**
 >È buona abitudine controllare regolarmente i log degli errori del server dato che contengono informazioni molto utili riguardo agli errori 404 e 500.
@@ -592,15 +592,15 @@ Ottimizzare il proprio codice
 
 È possibile rendere più performante un'applicazione ottimizzandone il codice. Questa sezione offre alcuni spunti su come fare ciò.
 
-### Compilazione del core
+### Compilazione del nucleo
 
 Caricare dieci file richiede più operazioni di I/O rispetto al caricamento di un grande file, specialmente su dischi lenti. Caricare un file molto grande richiede più risorse rispetto a caricarne uno più piccolo, specialmente se grossa parte del contenuto del file non è di alcun interesse per il parser PHP, è il caso dei commenti.
 
-Quindi fondere un grosso numero di file eliminandone i commenti contenuti è un'operazione che migliora le prestazioni. Symfony esegue già tale ottimizzazione, si chiama compilazione del core. All'inizio della prima richiesta (o dopo aver svuotato la cache) un'applicazione symfony concatena tutte le classi del core del framework (`sfActions`, `sfRequest`, `sfView` e così via) in un unico file, riduce la dimensione del file rimuovendo commenti e doppi spazi e salva tutto nella cache in un file chiamato `config_core_compile.yml.php`. Ogni richiesta seguente caricherà solamente questo singolo file ottimizzato invece che i 30 file che lo compongono.
+Quindi fondere un grosso numero di file eliminandone i commenti contenuti è un'operazione che migliora le prestazioni. Symfony esegue già tale ottimizzazione, si chiama compilazione del nucleo. All'inizio della prima richiesta (o dopo aver svuotato la cache) un'applicazione symfony concatena tutte le classi del nucleo del framework (`sfActions`, `sfRequest`, `sfView` e così via) in un unico file, riduce la dimensione del file rimuovendo commenti e doppi spazi e salva tutto nella cache in un file chiamato `config_core_compile.yml.php`. Ogni richiesta seguente caricherà solamente questo singolo file ottimizzato invece che i 30 file che lo compongono.
 
-Se l'applicazione ha classi che devono essere caricare ogni volta, specialmente se sono classi grandi con molti commenti, può essere un vantaggio aggiungerle al file compilato del core. Per fare questo basta aggiungere un file `core_compile.yml` nella cartella `config/` dell'applicazione in cui si elencheranno le classi che si vogliono aggiungere come nel listato 18-21.
+Se l'applicazione ha classi che devono essere caricare ogni volta, specialmente se sono classi grandi con molti commenti, può essere un vantaggio aggiungerle al file compilato del nucleo. Per fare questo basta aggiungere un file `core_compile.yml` nella cartella `config/` dell'applicazione in cui si elencheranno le classi che si vogliono aggiungere come nel listato 18-21.
 
-Listato 18-21 - Aggiungere le proprie classi al file compilato del core, in `frontend/config/core_compile.yml`
+Listato 18-21 - Aggiungere le proprie classi al file compilato del nucleo, in `frontend/config/core_compile.yml`
 
     - %SF_ROOT_DIR%/lib/myClass.class.php
     - %SF_ROOT_DIR%/apps/frontend/lib/myToolkit.class.php
@@ -615,6 +615,7 @@ Symfony mette a disposizione anche un altro strumento di ottimizzazione, il task
 
 Per vedere le strategie di ottimizzazione utilizzate nel task basta dare un'occhiata al suo codice sorgente.
 
-Sommario
---------
-Symfony è già un framework molto ottimizzato e in grado di gestire siti ad alto traffico senza problemi. Ma se davvero si avesse la necessità di ottimizzare ulteriormente le prestazioni della propria applicazione, mettere a punto la configurazione (che sia la configurazione del server, di PHP o le impostazioni dell'applicazione) può fornire un piccolo miglioramento. È consigliabile seguire le best practice per scrivere metodi del modello efficienti; e dato che il database rappresenta sempre un collo di bottiglia per le applicazioni web su di esso andrà riposta particolare attenzione. I template possono beneficiare anch'essi di alcune ottimizzazioni, ma i miglioramenti più evidenti arriveranno dall'utilizzo del sistema della cache. Infine non si esiti nell'analizzare plug-in esistenti dato che alcuni di essi mettono a disposizione tecniche innovative per aumentare ulteriormente la consegna delle pagine web (`sfSuperCache`, `project:optimize`).
+Riepilogo
+---------
+
+Symfony è già un framework molto ottimizzato e in grado di gestire siti ad alto traffico senza problemi. Ma se davvero si avesse la necessità di ottimizzare ulteriormente le prestazioni della propria applicazione, mettere a punto la configurazione (che sia la configurazione del server, di PHP o le impostazioni dell'applicazione) può fornire un piccolo miglioramento. È consigliabile seguire le best practice per scrivere metodi del modello efficienti; e dato che il database rappresenta sempre un collo di bottiglia per le applicazioni web, su di esso andrà riposta particolare attenzione. I template possono beneficiare anch'essi di alcune ottimizzazioni, ma i miglioramenti più evidenti arriveranno dall'utilizzo del sistema della cache. Infine non si esiti nell'analizzare plugin esistenti, dato che alcuni di essi mettono a disposizione tecniche innovative per aumentare ulteriormente la consegna delle pagine web (`sfSuperCache`, `project:optimize`).

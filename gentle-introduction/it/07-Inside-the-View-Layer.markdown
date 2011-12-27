@@ -57,7 +57,7 @@ Molte volte, gli helper sono intelligenti e fanno risparmiare codice:
 Gli helper facilitano il processo di scrittura dei template e generano il miglior codice HTML possibile in quanto a prestazioni e accessibilità. Si può sempre utilizzare il semplice HTML, ma gli helper in genere sono più veloci da scrivere.
 
 >**TIP**
->Ci si potrebbe chiedere perché gli helper sono nominati utilizzando la convenzione dell'underscore piuttosto che quella camelCase, utilizzata ovunque in symfony. Il motivo è che gli helper sono funzioni e tutte le funzioni PHP del core usano la convenzione dell'underscore.
+>Ci si potrebbe chiedere perché gli helper sono nominati utilizzando la convenzione del trattino basso piuttosto che quella camelCase, utilizzata ovunque in symfony. Il motivo è che gli helper sono funzioni e tutte le funzioni native di PHP usano la convenzione del trattino basso.
 
 #### Dichiarare gli helper
 
@@ -154,7 +154,7 @@ Listatog 7-5 - Layout predefinito, in `myproject/apps/frontend/templates/layout.
       </body>
     </html>
 
-Gli helper chiamati nella sezione `<head>` recuperano le informazioni dall'oggetto response e dalla configurazione view. Il tag `<body>` mostra il risultato del template. Con questo layout, la configurazione predefinita e il template di esempio nel listato 7-1 la view elaborata è simile a quanto si vede nel listato 7-6.
+Gli helper chiamati nella sezione `<head>` recuperano le informazioni dall'oggetto response e dalla configurazione view. Il tag `<body>` mostra il risultato del template. Con questo layout, la configurazione predefinita e il template di esempio nel listato 7-1 la vista elaborata è simile a quanto si vede nel listato 7-6.
 
 Listato 7-6 - Il Layout, la configurazione View e il template assemblato.
 
@@ -182,11 +182,11 @@ Listato 7-6 - Il Layout, la configurazione View e il template assemblato.
       </body>
     </html>
 
-Il template globale può essere completamente personalizzato per ciascuna applicazione. Aggiungerlo in ogni codice HTML in cui se ne ha bisogno. Questo layout spesso è usato per mantenere la navigazione del sito, i logo e altro. Si può anche avere più di un layout e decidere quale layout dovrebbe essere usato per ciascuna azione. Per ora non preoccuparsi delle inclusioni di JavaScript e fogli di stile; La sezione "Configurazione della View" mostrerà più avanti come ottenere ciò.
+Il template globale può essere completamente personalizzato per ciascuna applicazione. Aggiungerlo in ogni codice HTML in cui se ne ha bisogno. Questo layout spesso è usato per mantenere la navigazione del sito, i logo e altro. Si può anche avere più di un layout e decidere quale layout dovrebbe essere usato per ciascuna azione. Per ora non preoccuparsi delle inclusioni di JavaScript e fogli di stile; La sezione "Configurazione della vista" mostrerà più avanti come ottenere ciò.
 
 ### Scorciatoie nei template
 
-Nei template, alcune variabili symfony sono sempre disponibili. Queste scorciatoie forniscono l'accesso alla maggior parte delle informazioni necessarie nei template, attraverso oggetti del core di symfony:
+Nei template, alcune variabili symfony sono sempre disponibili. Queste scorciatoie forniscono l'accesso alla maggior parte delle informazioni necessarie nei template, attraverso oggetti del nucleo di symfony:
 
   * `$sf_context`: L'intero oggetto context (`istanza di sfContext`)
   * `$sf_request`: L'oggetto request(`istanza di sfRequest`)
@@ -243,9 +243,9 @@ Listato 7-7 - Includere un partial in un template del modulo `miomodulo`
     // si può omettere il nome del modulo
     <?php include_partial('miopartial1') ?>
 
-    // Include il partial frontend/modules/foobar/templates/_mypartial2.php
+    // Include il partial frontend/modules/pippo/templates/_mypartial2.php
     // In questo caso il nome del modulo è obbligatorio
-    <?php include_partial('foobar/miopartial2') ?>
+    <?php include_partial('pippo/miopartial2') ?>
 
     // Include il partial frontend/templates/_mypartial3.php
     // È considerato parte del modulo 'global'
@@ -384,21 +384,21 @@ Listato 7-13 - Passare i parametri a un componente e ai suoi template
     echo $foo;
      => 'bar'
 
-Si possono includere componenti in componenti, o nel layout globale, così come in ogni normale template. Come nelle azioni, i metodi `execute` dei componenti possono passare variabili ai relativi partial e avere accesso alle stesse scorciatoie. Ma le similitudini si fermano qua. Un componente non gestisce la sicurezza o la validazione, non può essere chiamato da Internet (solo dall'applicazione stessa) e non ha le varie possibilità di return. Questo è il motivo per cui un componente nell'esecuzione è più veloce di un'azione. 
+Si possono includere componenti in componenti, o nel layout globale, così come in ogni normale template. Come nelle azioni, i metodi `execute` dei componenti possono passare variabili ai relativi partial e avere accesso alle stesse scorciatoie. Ma le similitudini si fermano qui. Un componente non gestisce la sicurezza o la validazione, non può essere chiamato da Internet (solo dall'applicazione stessa) e non ha le varie possibilità di return. Questo è il motivo per cui un componente nell'esecuzione è più veloce di un'azione. 
 
 ### Gli slot
 
-I partial e i componenti sono ottimi per la riusabilità. Ma in molti casi i frammenti di codice devono andare a comporre un layout con più di una zona dinamica. Ad esempio, supponiamo che si desideri aggiungere alcuni tag personalizzati nella sezione `<head>` del layout, in base al contenuto di una azione. Oppure supponiamo che il layout ha una zona dinamica principale, che è composta dal risultato di una azione, più a numerose altre azioni più piccole, che hanno un contenuto predefinito presente nel layout che però può essere sovrascritto a livello del template.
+I partial e i componenti sono ottimi per la riusabilità. Ma in molti casi i frammenti di codice devono andare a comporre un layout con più di una zona dinamica. Ad esempio, supponiamo che si desideri aggiungere alcuni tag personalizzati nella sezione `<head>` del layout, in base al contenuto di una azione. Oppure supponiamo che il layout abbia una zona dinamica principale, composta dal risultato di una azione, più numerose altre azioni più piccole, con un contenuto che è predefinito nel layout, ma che può essere sovrascritto a livello di template.
 
-Per queste situazioni, la soluzione è uno slot. In sostanza, uno slot è un segnaposto che si può mettere in qualsiasi degli elementi della vista (layout, template o partial). Riempire questo segnaposto è come l'impostazione di una variabile. Il codice di riempimento è memorizzato nella risposta a livello globale, in modo da poterlo definire ovunque (nel layout, template o partial). Basta fare in modo di definire uno slot prima di includerlo e ricordate che il layout viene eseguito dopo il template (questo è il processo di decorazione) e che i partial vengono eseguiti quando sono chiamati in un template. Il tutto sembra un po' troppo astratto? Vediamo un esempio.
+Per queste situazioni, la soluzione è uno slot. In sostanza, uno slot è un segnaposto che si può mettere in qualsiasi degli elementi della vista (layout, template o partial). Riempire questo segnaposto è come impostare una variabile. Il codice di riempimento è memorizzato nella risposta a livello globale, in modo da poterlo definire ovunque (nel layout, template o partial). Basta fare in modo di definire uno slot prima di includerlo e ricordare che il layout viene eseguito dopo il template (processo di decorazione) e che i partial vengono eseguiti quando sono chiamati in un template. Il tutto sembra un po' troppo astratto? Vediamo un esempio.
 
-Immaginiamo un layout con una zona per il template e due slot: uno per la barra laterale e l'altro per il piè di pagina. I valori per lo slot sono definiti nel template. Durante il processo di decorazione, il codice del layout avvolge il codice del template e gli slot vengono riempiti con i valori definiti precedentemente, così come è illustrato nella figura 7-4. La barra laterale e il piè di pagina possono essere contestuali all'azione principale. È come avere un layout con più di un "buco".
+Immaginiamo un layout con una zona per il template e due slot: uno per la barra laterale e l'altro per il piè di pagina. I valori per lo slot sono definiti nel template. Durante il processo di decorazione, il codice del layout avvolge il codice del template e gli slot sono riempiti con i valori definiti precedentemente, così come illustrato in figura 7-4. La barra laterale e il piè di pagina possono essere contestuali all'azione principale. È come avere un layout con più di un "buco".
 
 Figura 7-4 - Slot layout definiti in un template
 
 ![Slot layout definiti in un template](http://www.symfony-project.org/images/book/1_4/F0704.png "Slot layout definiti in un template")
 
-Vedere un po' di codice chiarirà ulteriormente le cose. Per includere uno slot, usare l'helper `include_slot()`. L'helper `has_slot()` restituisce `true` se lo slot è stato definito in precedenza, fornendo come bonus un meccanismo di fallback. Ad esempio, definire un segnaposto per uno slot `'sidebar'` nel layout e i suoi contenuti predefiniti come mostrato nel listato 7-14.
+Vedere un po' di codice chiarirà ulteriormente le cose. Per includere uno slot, usare l'helper `include_slot()`. L'helper `has_slot()` restituisce `true` se lo slot è stato definito in precedenza, fornendo come bonus un meccanismo di fallback. Ad esempio, definire un segnaposto per uno slot `'sidebar'` nel layout e i suoi contenuti predefiniti, come mostrato nel listato 7-14.
 
 Listato 7-14 - Inclusione di uno slot `'sidebar'` nel layout
 
@@ -407,22 +407,22 @@ Listato 7-14 - Inclusione di uno slot `'sidebar'` nel layout
     <?php if (has_slot('sidebar')): ?>
       <?php include_slot('sidebar') ?>
     <?php else: ?>
-      <!-- default sidebar code -->
-      <h1>Contextual zone</h1>
+      <!-- codice predefinito della barra laterale -->
+      <h1>Zona contestuale</h1>
       <p>Questa zona contiene link e informazioni
       relative al contenuto principale della pagina.</p>
     <?php endif; ?>
     </div>
 
-Capita abbastanza frequentemente di dover mostrare dei contenuti predefiniti se uno slot non è definito e per questo scopo l'helper `include_slot` restituisce un valore booleano che indica se lo slot è stato definito. Il listato 7-15 mostra come utilizzare questo valore in modo da semplificare il codice.
+Capita abbastanza frequentemente di dover mostrare dei contenuti predefiniti se uno slot non è definito e per questo scopo l'helper `include_slot` restituisce un valore booleano, che indica se lo slot è stato definito. Il listato 7-15 mostra come utilizzare questo valore in modo da semplificare il codice.
 
 Listato 7-15 - Inclusione di uno slot `'sidebar'` nel layout
 
     [php]
     <div id="sidebar">
     <?php if (!include_slot('sidebar')): ?>
-      <!-- default sidebar code -->
-      <h1>Contextual zone</h1>
+      <!-- codice predefinito della barra laterale -->
+      <h1>Zona contestuale</h1>
       <p>Questa zona contiene link e informazioni
       relative al contenuto principale della pagina.</p>
     <?php endif; ?>
@@ -442,13 +442,13 @@ Listato 7-16 - Sovrascrivere il contenuto dello slot `'sidebar'` in un template
       <p>email: <?php echo $user->getEmail() ?></p>
     <?php end_slot() ?>
 
-Il codice tra gli helper slot è eseguito nel contesto del template, quindi ha accesso a tutte le variabili che sono state definite nell'azione. Symfony metterà automaticamente il risultato dell'esecuzione del codice nell'oggetto response. Non verrà visualizzato nel template, ma reso disponibile per future chiamate `include_slot()`, come quella mostrata nel listato 7-14.
+Il codice tra gli helper degli slot è eseguito nel contesto del template, quindi ha accesso a tutte le variabili che sono state definite nell'azione. Symfony metterà automaticamente il risultato dell'esecuzione del codice nell'oggetto response. Non verrà visualizzato nel template, ma reso disponibile per future chiamate `include_slot()`, come quella mostrata nel listato 7-14.
 
-Gli slot sono molto utili per definire zone che devono mostrare dei contenuti contestuali. Possono anche essere usati per aggiungere codice HTML al layout solo per certe azioni. Ad esempio, un template che mostra l'elenco delle ultime news potrebbe volere aggiungere un link a un feed RSS nella zona `<head>` del layout. Questo si può ottenere semplicemente aggiungendo uno slot 'feed'` nel layout e sovrascrivendolo nel template dell'elenco.
+Gli slot sono molto utili per definire zone che devono mostrare dei contenuti contestuali. Possono anche essere usati per aggiungere codice HTML al layout solo per certe azioni. Ad esempio, un template che mostra l'elenco delle ultime news potrebbe volere aggiungere un link a un feed RSS nella zona `<head>` del layout. Lo si può fare semplicemente aggiungendo uno slot 'feed'` nel layout e sovrascrivendolo nel template dell'elenco.
 
-Se il contenuto dello slot è molto corto, per esempio come nel caso di uno slot `titolo`, si può semplicemente passare il contenuto come secondo parametro del metodo `slot()`, come mostrato nel listato 7-17.
+Se il contenuto dello slot è breve, per esempio come nel caso di uno slot `titolo`, si può semplicemente passare il contenuto come secondo parametro del metodo `slot()`, come mostrato nel listato 7-17.
 
-Listato 7-17 - Usare lo `slot()` per definire un contenuto corto
+Listato 7-17 - Usare lo `slot()` per definire un contenuto breve
 
     [php]
     <?php slot('titolo', 'Il contenuto del titolo') ?>
@@ -456,9 +456,9 @@ Listato 7-17 - Usare lo `slot()` per definire un contenuto corto
 >**SIDEBAR**
 >Dove cercare i frammenti dei template
 >
->Le persone che lavorano sui template in genere sono dei web designer che possono non conoscere symfony molto bene e possono avere difficoltà a trovare i frammenti dei template, dal momento che possono essere sparsi in tutta l'applicazione. Queste brevi linee guida, renderanno più comodo il dover lavorare con il sistema dei template di symfony.
+>Chi lavora sui template è in genere un web designer, che potrebbe non conoscere symfony molto bene e avere difficoltà a trovare i frammenti dei template, dal momento che possono essere sparsi in tutta l'applicazione. Queste brevi linee guida renderanno più comodo il dover lavorare con il sistema dei template di symfony.
 >
->Prima di tutto, anche se un progetto symfony contiene molte cartelle, tutti i file dei layout, dei template e dei frammenti di template risiedono in cartelle chiamate `templates/`. Quindi per quello che può interessare a un web designer, la struttura di un progetto può essere ridotta a qualcosa di questo tipo:
+>Prima di tutto, anche se un progetto symfony contiene molte cartelle, tutti i file dei layout, dei template e dei frammenti di template risiedono in cartelle chiamate `templates/`. Quindi, per quello che può interessare a un web designer, la struttura di un progetto può essere ridotta a qualcosa di questo tipo:
 >
 >
 >     mioprogetto/
@@ -488,19 +488,19 @@ In symfony, una vista consiste di due parti distinte:
   * La presentazione HTML del risultato dell'azione (memorizzata nel template, nel layout e nei frammenti di template)
   * Tutto il resto, comprese le seguenti cose:
 
-    * Meta dichiarazioni: keywords, description, o durata della cache.
-    * Tag title della pagina: non solo aiuta gli utenti con numerose finestre aperte del browser a trovare la vostra, ma è anche molto importante per l'indicizzazione nei motori di ricerca.
+    * Meta dichiarazioni: keywords, description o durata della cache.
+    * Tag `title` della pagina: non solo aiuta gli utenti con numerose finestre aperte del browser a trovare quella giusta, ma è anche molto importante per l'indicizzazione nei motori di ricerca.
     * Inclusione di file: JavaScript e fogli di stile.
-    * Layout: alcune azioni richiedono un layout personalizzato (pop-up, ads, ecc.) oppure anche nessun layout (ad esempio le azioni Ajax).
+    * Layout: alcune azioni richiedono un layout personalizzato (popup, banner, ecc.) oppure anche nessun layout (ad esempio le azioni Ajax).
 
-Nella vista, tutto quello che non è HTML è chiamato configurazione della vista e symfony fornisce due modi per gestirla. Il modo principale è attraverso il file di configurazione `view.yml`. Può essere utilizzato ogni volta che i valori non dipendono dal contesto o per le query del database. Quando è necessario impostare valori dinamici, il metodo alternativo è quello di impostare la configurazione della vista attraverso gl iattributi dell'oggetto `sfResponse` direttamente nell'azione.
+Nella vista, tutto quello che non è HTML è chiamato configurazione della vista e symfony fornisce due modi per gestirla. Il modo principale è attraverso il file di configurazione `view.yml`. Può essere utilizzato ogni volta che i valori non dipendono dal contesto o per le query del database. Quando è necessario impostare valori dinamici, il metodo alternativo è quello di impostare la configurazione della vista attraverso gli attributi dell'oggetto `sfResponse`, direttamente nell'azione.
 
 >**NOTE**
 >Se si imposta un certo parametro della configurazione della vista sia attraverso l'oggetto `sfResponse` che attraverso il file `view.yml`, la definizione di `sfResponse` ha la precedenza.
 
 ### Il file `view.yml`
 
-Ogni modulo può avere un file `view.yml` per definire la configurazione delle sue viste. Questo permette di definire le impostazioni di visualizzazione per un intero modulo e vista per vista in un singolo file. Le chiavi di primo livello del file `view.yml` sono i nomi dei moduli della vista. Il listato 7-18 mostra un esempio della configurazione della vista
+Ogni modulo può avere un file `view.yml`, per definire la configurazione delle sue viste. Questo permette di definire le impostazioni di visualizzazione per un intero modulo e vista per vista in un singolo file. Le chiavi di primo livello del file `view.yml` sono i nomi dei moduli della vista. Il listato 7-18 mostra un esempio della configurazione della vista
 
 Listato 7-18 - Esempio Livello-Modulo `view.yml`
 
@@ -522,14 +522,14 @@ Listato 7-18 - Esempio Livello-Modulo `view.yml`
 
 Le impostazioni predefinite per il modulo sono definite sotto la chiave `all:` nel modulo `view.yml`. Le impostazioni predefinite per tutte le viste dell'applicazione sono definite in `view.yml`. Anche qua vale il principio della configurazione a cascata:
 
-  * In `apps/frontend/modules/miomodulo/config/view.yml`, le definizioni per-view si applicano solo a una vista e sovrascrivono le definizioni a livello di modulo.
+  * In `apps/frontend/modules/miomodulo/config/view.yml`, le definizioni per vista si applicano solo a una vista e sovrascrivono le definizioni a livello di modulo.
   * In `apps/frontend/modules/miomodulo/config/view.yml`, le definizioni `all:` si applicano a tutte le azioni del modulo e sovrascrivono le definizioni a livello di applicazione.
   * In `apps/frontend/config/view.yml`, le definizioni `default:` si applicano a tutti i moduli e a tutte le azioni dell'applicazione.
 
 >**TIP**
 >I file `view.yml` a livello di modulo non esistono nella modalità predefinita. La prima volta che si ha necessità di modificare un parametro della configurazione della vista per un modulo, bisogna creare un file `view.yml` vuoto nella cartella `config/` del modulo stesso.
 
-Dopo aver visto il template predefinito nel listato 7-5 e un esempio di una response finale nel listato 7-6, c isi potrebbe chiedere da dove provengono i valori dell'header. La risposta è che sono le impostazioni predefinite per la vista, definite nel `view.yml` dell'applicazione e mostrate nel listato 7-19.
+Dopo aver visto il template predefinito nel listato 7-5 e un esempio di una response finale nel listato 7-6, ci si potrebbe chiedere da dove provengono i valori dell'header. La risposta è che sono le impostazioni predefinite per la vista, definite nel file `view.yml` dell'applicazione e mostrate nel listato 7-19.
 
 Listato 7-19 - Configurazione predefinita della vista a livello di applicazione, in `apps/frontend/config/view.yml`
 
@@ -900,20 +900,20 @@ Questo, per impostazione predefinita, aggiungerà `htmlspecialchars()` nell'outp
     [php]
     $this->test = '<script>alert(document.cookie)</script>';
 
-Con l'escape dell'output a on, facendo l'echo di questa variabile nel template verranno mostrati i dati sott escape:
+Con l'escape dell'output attivato, l'echo di questa variabile nel template mostrerà i dati sotto escape:
 
     [php]
     echo $test;
      => &lt;script&gt;alert(document.cookie)&lt;/script&gt;
 
-Inoltre, ogni template ha accesso a una variabile $sf_data` che è un contenitore di oggetti che fa riferimento a tutte le variabili sotto escape. Quindi si può anche visualizzare la variabile test in questo modo:
+Inoltre, ogni template ha accesso a una variabile `$sf_data`, che è un contenitore di oggetti riferito a tutte le variabili sotto escape. Quindi si può anche visualizzare la variabile test in questo modo:
 
     [php]
     echo $sf_data->get('test');
     => &lt;script&gt;alert(document.cookie)&lt;/script&gt;
 
 >**TIP**
->L'oggetto $sf_data object implementa l'interfaccia Array, quindi invece di usare `$sf_data->get('miavariabile')`, si possono recuperare i valori sotto escape chiamando `$sf_data['myvariable']`. Ma non è un array reale, quindi le funzioni tipo `print_r()` non funzioneranno come ci si attende.
+>L'oggetto `$sf_data object` implementa l'interfaccia Array, quindi invece di usare `$sf_data->get('miavariabile')`, si possono recuperare i valori sotto escape chiamando `$sf_data['myvariable']`. Ma non è un array reale, quindi le funzioni tipo `print_r()` non funzioneranno come ci si attende.
 
 `$sf_data` fornisce anche l'accesso ai dati non sotto escape, detti anche "raw". Questo è utile quando una variabile memorizza codice HTML che deve essere interpretato dal browser, a condizione che vi "fidiate" di questa variabile. Richiamare il metodo `getRaw()` quando si vogliono visualizzare dati raw.
 

@@ -73,7 +73,7 @@ Più avanti in questo capitolo saranno approfonditi i metodi per testare e monit
 >**NOTE**
 >Gli slot sono parte dei template, quindi effettuare la cache di un'azione significa anche memorizzare il valore dello slot definito dal template dell'azione. Di conseguenza la cache funziona nativamente per gli slot.
 
-Il sistema di cache funziona anche per le pagine con argomenti. Il modulo `user` potrebbe avere, ad esempio, un'azione `show` che si aspetta un `id` per poter mostrare i dettagli di un utente. 
+Il sistema di cache funziona anche per le pagine con parametri. Il modulo `user` potrebbe avere, ad esempio, un'azione `show` che si aspetta un `id` per poter mostrare i dettagli di un utente. 
 Per ottenere questo comportamento occorre modificare il file `cache.yml` in modo tale da abilitare la cache anche per questa casistica, come mostrato nel listato 12-3.
 
 Per organizzare i vari file `cache.yml`, sarà sufficiente ragruppare le impostazioni comuni a tutte le azioni di un modulo sotto la chiave `all:`, anch'essa mostrata nel listato 12-3.
@@ -354,7 +354,7 @@ Per evitare incoerenze e bug, è possibile eliminare elementi dalla cache in div
 ### Eliminare l'intera cache
 
 Il task `cache:clear` della linea di comando di symfony elimina l'intera cache (HTML, configurazione e i18N). 
-è possibile passare degli argomenti per eliminare solo alcune parti, come mostrato dal listato 12-8. Deve essere invocato solo dalla root di un progetto symfony.
+è possibile passare dei parametri per eliminare solo alcune parti, come mostrato dal listato 12-8. Deve essere invocato solo dalla radice di un progetto symfony.
 
 Listato 12-8 - Eliminare la cache
 
@@ -620,9 +620,9 @@ Figura 12-5 - Identificazione di un elemento in cache
 HTTP 1.1 e cache lato client
 ----------------------------
 
-Il protocollo HTTP 1.1 definisce una manciata di header che possono essere di grande utilizzo per incrementare la velocità di un applicazione controllando il sistema di cache del browser.
+Il protocollo HTTP 1.1 definisce una manciata di header che possono essere di grande utilizzo per incrementare la velocità di un'applicazione, controllando il sistema di cache del browser.
 
-Le specifiche HTTP 1.1 del World Wide Web Consortium (W3C, [http://www. w3.org/Protocols/rfc2616/rfc2616-sec14.html]) descrivono tali header in dettaglio. 
+Le specifiche HTTP 1.1 del World Wide Web Consortium (W3C, [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html]) descrivono tali header in dettaglio. 
 Se un'azione ha la cache abilitata e usa l'opzione `with_layout`, può utilizzare uno o più meccanismi descritti in questa sezione.
 
 Anche se alcuni browser degli utenti che utilizzassero l'applicazione non supportassero HTTP 1.1, non vi è alcun rischio nell'utilizzo  delle funzionalità di cache del protocollo. 
@@ -720,8 +720,8 @@ Un ultimo header può essere spedito tramite symfony: `Expires`.
 >La conseguenza principale dell'abilitazione del meccanismo `Cache-Control` è che il server non mostrerà tutte le richieste eseguite dagli utenti, 
 >ma solo quelle ricevute effettivamente. Se le prestazioni migliorassero, l'apparente popolarità del sito potrebbe diminuire nelle statistiche.
 
-Sommario
---------
+Riepilogo
+---------
 
 Il sistema di cache fornisce accelerazioni variabili delle prestazioni a seconda del tipo di cache scelta. Dal maggior guadagno al minimo, i tipi di cache sono i seguenti:
 

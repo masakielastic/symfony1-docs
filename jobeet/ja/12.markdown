@@ -53,7 +53,7 @@
 
     $ php symfony doctrine:generate-admin backend JobeetJob --module=job
     $ php symfony doctrine:generate-admin backend JobeetCategory
-    
+
 </doctrine>
 
 これら2つのコマンドは `JobeetJob` と `JobeetCategory` モデルクラスに対してそれぞれ `job` と `category` モジュールを生成します。
@@ -139,7 +139,7 @@
 現在、sfDoctrinePlugin からのアセットが
 </doctrine>
  web/ フォルダに置かれていません。
- 
+
 `plugin:publish-assets` によって web/ フォルダの下に配置します。
 
     $ php symfony plugin:publish-assets
@@ -239,7 +239,6 @@ symfony のキャッシュ
 
 アドミンジェネレータの動作は既知の動作と良く似ています。実際、これはモデルとフォームクラスに関してすでに学んだこととよく似ています。モデルスキーマの定義に基づいて、symfony はモデルとフォームクラスを生成します。アドミンジェネレータの場合、生成されたモジュールを module フォルダ内の `config/generator.yml` ファイルを編集することで設定できます。
 
-<propel>
     [yml]
     # apps/backend/modules/job/config/generator.yml
     generator:
@@ -267,7 +266,6 @@ symfony のキャッシュ
           form:    ~
           edit:    ~
           new:     ~
-</propel>
 
 `generator.yml` ファイルを更新するたびに、symfony はキャッシュを再生成します。後で見るように、アドミンジェネレータに生成されたモジュールをカスタマイズするのは簡単で、早く、楽しいことです。
 
@@ -1015,7 +1013,7 @@ Jobeet の admin の最終的なコンフィギュレーションは次のとお
         singular:              ~
         plural:                ~
         route_prefix:          jobeet_job
-        
+
 <propel>
         with_propel_route:   true
 </propel>
@@ -1084,7 +1082,7 @@ Jobeet の admin の最終的なコンフィギュレーションは次のとお
         singular:              ~
         plural:                ~
         route_prefix:          jobeet_category
-        
+
 <propel>
         with_propel_route:   true
 </propel>

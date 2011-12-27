@@ -364,7 +364,7 @@ che contengono solamente il codice del controllore specifico di una pagina.
 
 Uno dei grandi vantaggi nell'avere un front controller è che viene offerto un unico punto di accesso per tutto l'applicativo.
 Qualora si decidesse di rendere inaccessibile l'applicativo, basterà semplicemente modificare lo script del front controller.
-In un'applicativo sprovvisto di front controller, si dovrebbe intervenire su ogni singolo controllore per poter ottenere lo stesso effetto.
+In un applicativo sprovvisto di front controller, si dovrebbe intervenire su ogni singolo controllore per poter ottenere lo stesso effetto.
 
 #### Orientamento agli oggetti
 
@@ -730,34 +730,34 @@ Listato 2-15 - Utilizzo del metodo proxy del contenitore dei parametri dell'ogge
     echo $request->getParameter('foo');
      => 'bar'
 
-Il metodo getter del contenitore di parametri accetta un valore predefinito come secondo argomento.
-Tutto ciò fornisce un utile meccanismo di fallback che risulta molto più conciso rispetto a un blocco condizionale.
+Il metodo getter del contenitore di parametri accetta un valore predefinito come secondo parametro.
+Tutto ciò fornisce un utile meccanismo di fallback, che risulta molto più conciso rispetto a un blocco condizionale.
 Si veda come esempio il listato 2-16.
 
 Listato 2-16 - Utilizzo del valore predefinito 
 
     [php]
-    // Il parametro 'foobar' non è definito, il metodo getter restituisce un valore nullo
-    echo $request->getParameter('foobar');
+    // Il parametro 'pippo' non è definito, il metodo getter restituisce un valore nullo
+    echo $request->getParameter('pippo');
      => null
 
     //Un valore predefinito può essere utilizzato mettendo il metodo getter in un blocco condizionale
-    if ($request->hasParameter('foobar'))
+    if ($request->hasParameter('pippo'))
     {
-      echo $request->getParameter('foobar');
+      echo $request->getParameter('pippo');
     }
     else
     {
-      echo 'default';
+      echo 'predefinito';
     }
-     => default
+    // => predefinito
 
-    // Ma risulta più veloce e immediato l'utilizzo di un secondo argomento per il valore predefinito
-    echo $request->getParameter('foobar', 'default');
-     => default
+    // Ma risulta più veloce e immediato l'utilizzo di un secondo parametro per il valore predefinito
+    echo $request->getParameter('pippo', 'predefinito');
+    // => predefinito
 
 Alcune classi del nucleo di symfony utilizzano un contenitore di parametri che supporta i namespace (grazie alla classe  `sfNamespacedParameterHolder`).
-Se viene specificato un terzo argomento al setter o al getter, esso viene utilizzato come namespace e il parametro verrà definito esclusivamente all'interno del namespace.
+Se viene specificato un terzo parametro al setter o al getter, esso viene utilizzato come namespace e il parametro verrà definito esclusivamente all'interno del namespace.
 Listato 2-17 ne mostra un esempio.
 
 Listato 2-17 - Utilizzo dei namespace con il contenitore dei parametri di `sfUser`
@@ -832,8 +832,8 @@ Se la classe verrà trovata, verrà inclusa automaticamente.
 Collocando le proprie classi all'interno delle cartelle `lib/' non sarà più necessario includerle.
 Questo è il motivo per il quale solitamente i progetti symfony non contengono direttive `include_once` o `require_once`.
 
-Sommario
---------
+Riepilogo
+---------
 
 L'utilizzo di un framework MVC obbliga lo sviluppatore a organizzare il codice in accordo con le convenzioni del framework stesso.
 Il codice di presentazione appartiene alla vista, la manipolazione dei dati appartiene al modello e la logica della richiesta appartiene al controllore.

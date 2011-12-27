@@ -3,7 +3,7 @@ Capitolo 16 - Strumenti per la gestione dell'applicazione
 
 Durante le fasi di sviluppo e di deployment, gli sviluppatori richiedono un flusso costante di informazioni diagnostiche, al fine di determinare se l'applicazione sta funzionando come previsto. Tali informazioni generalmente vengono aggregate attraverso utility per il log e il debug. A causa del ruolo centrale dei framework come symfony, utilizzati come motore delle applicazioni, è essenziale che tali capacità siano strettamente integrate in modo da garantire uno sviluppo efficiente.
 
-Durante la vita di un'applicazione sul server di produzione, l'amministratore dell'applicazione ripete un gran numero di task, dalla rotazione dei log agli aggiornamenti. Un framework deve, per quanto possibile anche fornire strumenti per automatizzare questi task.
+Durante la vita di un'applicazione sul server di produzione, l'amministratore dell'applicazione ripete un gran numero di compiti, dalla rotazione dei log agli aggiornamenti. Un framework deve, per quanto possibile, anche fornire strumenti per automatizzare tali compiti.
 
 Questo capitolo spiega come gli strumenti di gestione delle applicazioni di symfony siano in grado di rispondere a tutte queste esigenze.
 
@@ -49,7 +49,7 @@ Listato 16-2 - Esempio del contenuto di un file log di symfony, in `log/frontend
 Si possono trovare molti dettagli in questi file, comprese le query SQL effettive inviate al database, i template chiamati, la catena di chiamate tra gli oggetti e così via.
 
 >**NOTE**
->Il formato dei file di log è configurabile sovrascrivendo le impostazioni `format` e/o `time_format` presenti in `factories.yml` come mostrato nel listato 16-3.
+>Il formato dei file di log è configurabile sovrascrivendo le impostazioni `format` e/o `time_format` presenti in `factories.yml`, come mostrato nel listato 16-3.
 
 Listato 16-3 - Cambiare il formato del log
 
@@ -129,8 +129,8 @@ Listato 16-6 - Aggiungere un messaggio di log personalizzato da qualsiasi parte
 >     require_once('Log.php');
 >     require_once('Log/error_log.php');
 >
->     // Define a thin wrapper to implement the interface
->     // for the logger we want to use with symfony
+>     // Definiscee un piccolo wrapper per implementare l'interfaccia
+>     // per il logger che vogliamo usare con symfony
 >     class Log_mio_error_log extends Log_error_log implements sfLoggerInterface
 >     {
 >     }
@@ -169,7 +169,7 @@ Al contrario, quando la modalità debug è disattivata, l'elaborazione viene ges
   * Per eseguire una rielaborazione della configuazione, è necessario cancellare manualmente la cache della configurazione.
   * Un errore durante l'elaborazione della richiesta restituisce una risposta con codice 500 (errore interno del server), senza nessuna spiegazione su quale possa essere la causa del problema.
 
-La modalità debug è attivata per applicazione nel front controller. Viene gestita dal valore del terzo argomento passato nella chiamata del metodo `getApplicationConfiguration()`, come mostrato nel listato 16-8.
+La modalità debug è attivata per applicazione nel front controller. Viene gestita dal valore del terzo parmatro passato nella chiamata del metodo `getApplicationConfiguration()`, come mostrato nel listato 16-8.
 
 Listato 16-8 - Esempio di front controller con la modalità di debug attivata, in `web/frontend_dev.php`
 
@@ -188,7 +188,7 @@ Listato 16-8 - Esempio di front controller con la modalità di debug attivata, i
 
 Quando si verifica un'eccezione nella modalità di debug, symfony mostra un'utile informazione dull'eccezione che contiene tutto quello di cui si ha bisogno per trovare la causa del problema.
 
-I messaggi con le eccezioni sono scritti in modo chiaro e indicano la causa più probabile del problema. Spesso forniscono una possibile soluzione per risolvere il problema e per la maggior parte dei problemi più comuni, la pagina con l'eccezione può contenere un link a una pagina del sito di symfony con maggiori dettagli sull'eccezione. La pagina dell'eccezione mostra dove è avvenuto l'errore nel codice PHP (con evidenziazione colorata della sintassi), insieme allo stack completo delle chiamate di metodoto, come mostrato in figura 16-1. È possibile seguire il trace alla prima chiamata che ha causato il problema. Sono anche indicati gli argomenti che sono stati passati ai metodi.
+I messaggi con le eccezioni sono scritti in modo chiaro e indicano la causa più probabile del problema. Spesso forniscono una possibile soluzione per risolvere il problema e per la maggior parte dei problemi più comuni, la pagina con l'eccezione può contenere un link a una pagina del sito di symfony con maggiori dettagli sull'eccezione. La pagina dell'eccezione mostra dove è avvenuto l'errore nel codice PHP (con evidenziazione colorata della sintassi), insieme allo stack completo delle chiamate di metodoto, come mostrato in figura 16-1. È possibile seguire il trace alla prima chiamata che ha causato il problema. Sono anche indicati i parametri che sono stati passati ai metodi.
 
 >**NOTE**
 >Symfony si basa proprio sulle eccezioni PHP per la segnalazione degli errori. Ad esempio, l'errore 404 può essere lanciato da un `sfError404Exception`.
@@ -228,7 +228,7 @@ Bisogna riavviare il web server perché la modalità Xdebug venga attivata.
 
 ### La barra web per il debug
 
-I file di log contengono informazioni interessanti, ma non sono molto facili da leggere. L'azione più semplice, che è quella di trovare le linee di log per una particolare richiesta, può diventare molto complicata se si hanno molti utenti che utilizzano contemporaneamente l'applicazione e un lungo storico con gli eventi. Questo è il momento in cui si comincia a sentire il bisogno di una barar web per il debug.
+I file di log contengono informazioni interessanti, ma non sono molto facili da leggere. L'azione più semplice, che è quella di trovare le linee di log per una particolare richiesta, può diventare molto complicata se si hanno molti utenti che utilizzano contemporaneamente l'applicazione e un lungo storico con gli eventi. Questo è il momento in cui si comincia a sentire il bisogno di una barra web per il debug.
 
 Questa barra appare come una finestra semitrasparente sovrapposta al normale contenuto del browser, nell'angolo in alto a destra della finestra, come mostrato nella figura 16-2. Offre l'accesso al log degli eventi di symfony, alla configurazione corrente, alle proprietà degli oggetti request e response, ai dettagli delle query al database inviate durante la richiesta e a un grafico dei tempi di elaborazione legati alla richiesta.
 
@@ -239,7 +239,7 @@ Figura 16-2 - La barra web per il debug appare nell'angolo in alto a destra dell
 Il colore di sfondo della barra di debug dipende dal più alto livello di messaggio di log verificatosi durante la richiesta. Se nessun messaggio passa il livello `debug`, la barra degli strumenti ha un fondo grigio. Se un singolo messaggio raggiunge il livello `err`, la barra degli strumenti ha uno sfondo rosso.
 
 >**NOTE**
->Non bisogna confondere la modalità di debug con la barra web per il debug. La barra per il debug può essere visualizzata anche nella modalità di debug impostata a off, anche se in questo caso mostrerà molte meno informazioni.
+>Non bisogna confondere la modalità di debug con la barra web per il debug. La barra per il debug può essere visualizzata anche nella modalità di debug impostata a `false`, anche se in questo caso mostrerà molte meno informazioni.
 
 Per attivare la barra web di debug per una applicazione, aprire il file `settings.yml` e cercare la chiave `web_debug`. Negli ambienti prod` e `test`, il valore predefinito per `web_debug` è `false`, per cui se la si vuole utilizzare bisogna abilitarla manualmente. Nell'ambiente `dev` la configurazione predefinita è impostata a `true`, come mostrato nel listato 16-10.
 
@@ -269,8 +269,8 @@ Figura 16-4 - La sezione "logs" visualizza i messaggi di log per la richiesta co
 >Quando l'azione corrente proviene da una redirezione, nel pannello "logs" sono presenti solo i log dell'utlima richiesta, quindi i file di log rimangono indispensabili per fare il debug.
 
   * Quando ci sono richieste di esecuzione di query SQL, appare l'icona di un database nella barra degli strumenti. Cliccare per vedere il dettaglio delle query, come mostrato nella figura 16-5.
-  * Alla destra dell'icona dell'orologio c'è il tempo totale necessario per elaborare la richiesta. Bisogna tener conto che la barra web per il debug e la modalità stessa di debug rallentano l'esecuzione della richiesta, quindi non bisogna considerare i tempi in sé, ma prestare attenzione solo alle differenze tra i tempi di esecuzione di due pagine diverse. Fare clic sull'icona dell'orologio per visualizzare i dettagli dei tempi di elaborazione categoria per categoria, come mostrato nella figura 16-6. Symfony visualizza il tempo trascorso in diversi momenti dell'elaborazione della richiesta. Solo i tempi relativi alla richiesta corrente hanno un senso per l'ottimizzazione, quindi il tempo impiegato dal core di symfony non viene visualizzato. Ecco perché la somma di questi tempi non è uguale al tempo totale.
-  * Fare clic sulla x rossa all'estremità destra della barra degli strumenti, per nascondere la barra stessa.
+  * Alla destra dell'icona dell'orologio c'è il tempo totale necessario per elaborare la richiesta. Bisogna tener conto che la barra web per il debug e la modalità stessa di debug rallentano l'esecuzione della richiesta, quindi non bisogna considerare i tempi in sé, ma prestare attenzione solo alle differenze tra i tempi di esecuzione di due pagine diverse. Fare clic sull'icona dell'orologio per visualizzare i dettagli dei tempi di elaborazione categoria per categoria, come mostrato nella figura 16-6. Symfony visualizza il tempo trascorso in diversi momenti dell'elaborazione della richiesta. Solo i tempi relativi alla richiesta corrente hanno un senso per l'ottimizzazione, quindi il tempo impiegato dal nucleo di symfony non viene visualizzato. Ecco perché la somma di questi tempi non è uguale al tempo totale.
+  * Fare clic sulla X rossa all'estremità destra della barra degli strumenti, per nascondere la barra stessa.
 
 Figura 16-5 - La sezione query del database, mostra le query eseguite nella richiesta corrente
 
@@ -315,7 +315,7 @@ Figura 16-6 - L'icona con l'orologio mostra il tempo di esecuzione per categoria
 
 ### Debug manuale
 
-È bello avere l'accesso ai messaggi di debug del framework, ma è ancora meglio essere in grado di accedere ai propri messaggi. Symfony fornisce scorciatoie, accessibili sia dalle azioni che dai modelli, per aiutare a traccaire eventi e/o valori durante l'esecuzione della richiesta.
+È bello avere l'accesso ai messaggi di debug del framework, ma è ancora meglio essere in grado di accedere ai propri messaggi. Symfony fornisce scorciatoie, accessibili sia dalle azioni che dai modelli, per aiutare a tracciare eventi e/o valori durante l'esecuzione della richiesta.
 
 I messaggi di log personalizzati vengono salvati nel file di log di symfony e compaiono nella barra web per il debug. (Il listato 16-5 fornisce un esempio della sintassi per un messaggio di log personalizzato. Un messaggio personalizzato è un buon modo per controllare il valore di una variabile da un template, ad esempio. Il listato 16-11 mostra come usare la barra web per il debug per avere il feedback da un template (da una azione invece, si può utilizzare `$this->logMessage()`).
 
@@ -338,7 +338,7 @@ Figura 16-7 - Un messaggio di log personalizzato visualizzato nella sezione "log
 Usare symfony fuori dal contesto web
 ------------------------------------
 
-Si può volere eseguire uno script da riga di comando (o tramite cron) che abbia accesso a tutte le classi e le caratteristiche di symfony, ad esempio per inviare e-mail in batch e per aggiornare periodicamente il modello tramite una elaborazione intensiva. Il modo più semplice per farlo è quello di creare uno script PHP che riproduca i primi passi di un front controller, in modo che symfony possa venire correttamente inizializzato. È inoltre possibile utilizzare il sistema a riga di comando di symfony, per trarre vantaggio del parse degli argomenti e dell'inizializzazione automatizzata del database.
+Si può volere eseguire uno script da riga di comando (o tramite cron) che abbia accesso a tutte le classi e le caratteristiche di symfony, ad esempio per inviare e-mail in batch e per aggiornare periodicamente il modello tramite una elaborazione intensiva. Il modo più semplice per farlo è quello di creare uno script PHP che riproduca i primi passi di un front controller, in modo che symfony possa venire correttamente inizializzato. È inoltre possibile utilizzare il sistema a riga di comando di symfony, per trarre vantaggio dell'analisi dei parametri e dell'inizializzazione automatizzata del database.
 
 ### File batch
 
@@ -369,9 +369,9 @@ Per eseguire il codice, basta chiamare lo script dalla riga di comando:
 
 ### Task personalizzati
 
-Un modo alternativo per creare script personalizzati a riga di comando è scrivere un **task symfony**. Proprio come i task `cache:clear` e `propel:build-model`, è possibile lanciare i propri task personalizzati dalla linea di comando con `php symfony`. I task personalizzati traggono vantaggio della capacità di analizzare argomenti e opzioni della linea di comando, possono incorporare i promi messaggi di aiuto e possono estendere task esistenti.
+Un modo alternativo per creare script personalizzati a riga di comando è scrivere un **task symfony**. Proprio come i task `cache:clear` e `propel:build-model`, è possibile lanciare i propri task personalizzati dalla linea di comando con `php symfony`. I task personalizzati traggono vantaggio della capacità di analizzare parametri e opzioni della linea di comando, possono incorporare i propri messaggi di aiuto e possono estendere task esistenti.
 
-Un task personalizzato è solo una classe che estende `sfBaseTask` situata in una cartella `lib/task/`, o sotto la root del progetto, o in una cartella di un plugin. Il nome del file deve terminare con 'Task.class.php'. Il listato 16-13 mostra un esempio di task presonalizzato.
+Un task personalizzato è solo una classe che estende `sfBaseTask`, situata in una cartella `lib/task/` o sotto la radice del progetto o in una cartella di un plugin. Il nome del file deve terminare con 'Task.class.php'. Il listato 16-13 mostra un esempio di task presonalizzato.
 
 Listato 16-13 - Esempio di task, in `lib/task/testCiaoTask.class.php`
 
@@ -406,7 +406,7 @@ Invece che scrivere manualmente lo scheletro del task, si può usare il task sym
 
     $ php symfony help generate:task
 
-I task possono accettare argomenti (parametri obbligatori, in un ordine predefinito) e opzioni (parametri opzionali non ordinati). Il listato 16-14 mostra un task più completo, che sfrutta tutte queste caratteristiche.
+I task possono accettare parametri (obbligatori, in un ordine predefinito) e opzioni (parametri opzionali non ordinati). Il listato 16-14 mostra un task più completo, che sfrutta tutte queste caratteristiche.
 
 Listato 16-14 - Un esempio di task più completo, in `lib/task/mioSecondoTask.class.php`
 
@@ -444,7 +444,7 @@ Listato 16-14 - Un esempio di task più completo, in `lib/task/mioSecondoTask.cl
 >
 >    $databaseManager = new sfDatabaseManager($this->configuration);
 >
->Se la configurazione del task definisce un argomento `application` e `env`, questi vengono automaticamente considerati quando viene creata la configurazione del task, quindi un task può utilizzare una qualunque delle connessioni a database definite nel file `databases.yml`. Per impostazione predefinita, gli scheletri generati dalla chiamata a `generate:task` comprendono questa inizializzazione.
+>Se la configurazione del task definisce un parametro `application` e `env`, questi vengono automaticamente considerati quando viene creata la configurazione del task, quindi un task può utilizzare una qualunque delle connessioni a database definite nel file `databases.yml`. Per impostazione predefinita, gli scheletri generati dalla chiamata a `generate:task` comprendono questa inizializzazione.
 
 Per ulteriori esempi sulle capacità del sistema dei task, si possono guaradre i sorgenti dei task esistenti di symfony.
 
@@ -573,11 +573,11 @@ Listato 16-18 - Esempio di impostazioni di connessione per una concronizzazione 
 >**NOTE**
 >Non bisogna confondere il server di produzione (il server host, come definito nel file `properties.ini` del progetto) con l'ambiente di produzione (il front controller e la configurazione utilizzati in produzione, presenti nei file di configurazione di una applicazione).
 
-Eseguireun rsync su SSH richiede diversi comandi e la sincronizzazione può necessitare di di un po' di tempo nel ciclo di vita di una applicazione. Per fortuna, symfony automatizza questo processo con un unico comando:
+Eseguire un rsync su SSH richiede diversi comandi e la sincronizzazione può necessitare di un po' di tempo nel ciclo di vita di una applicazione. Per fortuna, symfony automatizza questo processo con un unico comando:
 
     $ php symfony project:deploy production
 
-Questo comando lancia il comando `rsync` in modalità dry; questo vuol dire che mostra i file che devono essere sincronizzati, senza sincronizzarli realmente. Se si desidera effettuare la sincronizzazione, è necessario richiederlo esplicitamente con l'aggiunta dell'opzione `--go`.
+Questo comando lancia il comando `rsync` in modalità dry; questo vuol dire che mostra i file che devono essere sincronizzati, senza sincronizzarli realmente. Se si desidera effettuare la sincronizzazione, è necessario richiederlo esplicitamente, con l'aggiunta dell'opzione `--go`.
 
     $ php symfony project:deploy production --go
 
@@ -638,11 +638,11 @@ Listato 16-19 - Esempio di configurazione di esclusione file con rsync, in `miop
     CVS
 
 >**NOTE**
->Le cartelle `cache/` e `log/` non dovrebbero essere sincronizzate rispetto al server di svuluppo, ma devono comunque esistere nel server in produzione. Quindi se non sono presenti nel progetto, bisogna crearle a mano dentro a `mioprogetto/`.
+>Le cartelle `cache/` e `log/` non dovrebbero essere sincronizzate rispetto al server di sviluppo, ma devono comunque esistere nel server in produzione. Quindi se non sono presenti nel progetto, bisogna crearle a mano dentro a `mioprogetto/`.
 
 ### Gestire una applicazione in produzione
 
-Il comando che è usato più spesso nei server in produzione è `cache:clear`. Bisogna lanciarlo ogni volta che si aggiorna symfony o il progetto (ad esempio, dopo aver chiamato i ltask `project:deploy`) e ogni volta che si fanno dei cambiamenti nella configurazione in produzione.
+Il comando che è usato più spesso nei server in produzione è `cache:clear`. Bisogna lanciarlo ogni volta che si aggiorna symfony o il progetto (ad esempio, dopo aver chiamato il task `project:deploy`) e ogni volta che si fanno dei cambiamenti nella configurazione in produzione.
 
     $ php symfony cache:clear
 

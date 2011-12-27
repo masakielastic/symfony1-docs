@@ -1,8 +1,8 @@
 Capitolo 15 - Test funzionali e unitari
 =======================================
 
-L'automazione dei test è uno dei più grandi passi in avanti dalla quando si è passati alla programmazione a oggetti
-Particolarmente favorevole per sviluppo di applicazioni web, i test possono garantire la qualità di un applicazione anche se i rilasci sono numerosi. Symfony fornisce una varietà di strumenti per facilitare l'automazione dei test, che saranno introdotti in questo capitolo.
+L'automazione dei test è uno dei più grandi passi in avanti dalla quando si è passati alla programmazione a oggetti.
+Particolarmente utili allo sviluppo di applicazioni web, i test possono garantire la qualità di un'applicazione anche se i rilasci sono numerosi. Symfony fornisce una varietà di strumenti per facilitare l'automazione dei test, che saranno introdotti in questo capitolo.
 
 Automazione dei test
 --------------------
@@ -25,14 +25,14 @@ Per le interazioni più complesse, questi due tipi di test possono risultare ine
 
 Se si necessita di un approccio completo all'automazione dei test, probabilmente si avrà bisogno di usare in combinazione tutti i metodi messi a disposizione. Come linea guida, ricordarsi di mantenere i test semplici e leggibili.
 
->**NOTA**
->I test automatici funzionano basandosi sulla comparazione di un risultato con un output atteso. In altre parole valutano le asserzioni (espressioni come `$a == 2`). Il valore di un asserzione è o`vero` o `falso` e stabilisce se il test passa o fallisce. La parola asserzione è normalmente utilizzata quando si fa riferimento a tecniche di testing
+>**NOTE**
+>I test automatici funzionano basandosi sulla comparazione di un risultato con un output atteso. In altre parole valutano le asserzioni (espressioni come `$a == 2`). Il valore di un'asserzione è o `true` o `false` e stabilisce se il test passa o fallisce. La parola "asserzione" è normalmente utilizzata quando si fa riferimento a tecniche di test.
 
 ### Test-Driven Development
 
-Nella metodologia test-driven development (TDD), i test sono scritti prima del codice. Scrivere i test prima aiuta a concentrarsi sull'attività che una funzione dovrebbe svolgere prima ancora di averla sviluppata. È una buona pratica che anche altre metodologie, come l'Extreme Programming(XP), raccomandano. Inoltre prende in considerazione il fatto innegabile che se non si scrivono i test unitari in primo luogo, non si scriveranno mai.
+Nella metodologia test-driven development (TDD), i test sono scritti prima del codice. Scrivere i test prima aiuta a concentrarsi sull'attività che una funzione dovrebbe svolgere prima ancora di averla sviluppata. È una buona pratica che anche altre metodologie, come l'Extreme Programming (XP), raccomandano. Inoltre prende in considerazione il fatto innegabile che se non si scrivono i test unitari in primo luogo, non si scriveranno mai.
 
-Per esempio, immaginate di dover sviluppare una funzione che lavora su una stringa di testo (strip). La funzione toglie gli spazi all'inizio e alla fine della stringa, sostituisce caratteri non alfabetici con trattini bassi e trasforma tutte le lettere maiuscole in minuscole. Nel test-driven-development, si dovrebbe prima porre l'attenzione su tutti i casi possibili e fornire degli esempi di input e il risultato atteso per ognuno, come mostrato in tabellla 15-1 
+Per esempio, si immagini di dover sviluppare una funzione che lavora su una stringa di testo (strip). La funzione toglie gli spazi all'inizio e alla fine della stringa, sostituisce caratteri non alfabetici con trattini bassi e trasforma tutte le lettere maiuscole in minuscole. Nel test-driven development, si dovrebbe prima porre l'attenzione su tutti i casi possibili e fornire degli esempi di input e il risultato atteso per ognuno, come mostrato in tabellla 15-1 
 
 Tabella 15-1 - Una lista di casi di test per una funzione di rimozione di testo
 
@@ -46,32 +46,32 @@ Input                 | Output Atteso
 
 Bisognerebbe scrivere i test unitari, eseguirli e vedere il loro fallimento. Successivamente aggiungere il codice necessario per gestire il primo caso, eseguirlo e vedere il primo test passare e andare avanti in questo modo. Alla fine quando tutti i test passano, la funzione è corretta. 
 
-In un'applicazione costruita con la metodologia test-driven, la quantità di codice dedicato ai test raggiunge quasi il codice dell'applicazione vera e propria. Poiché non si vuole spendere tempo nelle operazioni debugging dei test è bene mantenere il loro codice semplice.
+In un'applicazione costruita con la metodologia test-driven, la quantità di codice dedicato ai test raggiunge quasi il codice dell'applicazione vera e propria. Poiché non si vuole spendere tempo nelle operazioni di debug dei test, è bene mantenere il loro codice semplice.
 
->**NOTA**
->Rifattorizzare un metodo può creare nuovi bug che non erano apparsi prima. Questo è il motivo per il quale è sempre una buona pratica eseguire tutti i test prima di rilasciare una nuova caratteristica dell'applicazione in produzione -- questo tipo di test è chiamato test di regressione. 
+>**NOTE**
+>Rifattorizzare un metodo può creare nuovi bug che non erano apparsi prima. Questo è il motivo per il quale è sempre una buona pratica eseguire tutti i test prima di rilasciare una nuova caratteristica dell'applicazione in produzione: questo tipo di test è chiamato test di regressione. 
 
 ### Il framework di test Lime
 
-Ci sono molti framework di test unitari nel mondo del PHP, il più conosciuto è PHPUnit. Symfony ha il suo, si chiama lime. È basato sulla libreria Perl `Test::More` ed è conforme al TAP che significa che il risultato dei test è mostrato come specificato nel Protocollo Test Anything Protocol, disegnato per una migliore leggibilità degli output dei test.
+Ci sono molti framework di test unitari nel mondo del PHP, il più conosciuto è PHPUnit. Symfony ha il suo, si chiama lime. È basato sulla libreria Perl `Test::More` ed è conforme al TAP, che significa che il risultato dei test è mostrato come specificato nel protocollo Test Anything Protocol, disegnato per una migliore leggibilità degli output dei test.
 
 Lime supporta i test unitari. È molto leggero in confronto agli altri framework di test in PHP e ha diversi vantaggi:
 
-  * Lancia file di test in una sandbox per evitare strani effetti collaterali tra un test e l'altro. Non tutti i framework di test sono in grado di garantire un ambiente pulito per ogni test.
-  * I test di lime sono molto leggibili, così come l'output. Su sistemi compatibili, lime utilizza output colorato in modo da distinguere le informazioni importanti. 
+  * Lancia file di test in una sandbox, per evitare strani effetti collaterali tra un test e l'altro. Non tutti i framework di test sono in grado di garantire un ambiente pulito per ogni test.
+  * I test di lime sono molto leggibili, così come l'output. Su sistemi compatibili, lime utilizza output colorato, in modo da distinguere le informazioni importanti. 
   * Symfony stesso usa lime per i test di regressione, quindi molti esempi di test unitari e funzionali possono essere trovati nel codice sorgente di symfony.
-  * Lo stesso core di Lime è validato con test unitari
-  * È scritto in php, è veloce, scritto bene e non ha dipendenze.
+  * Lo stesso nucleo di lime è validato con test unitari
+  * È scritto in PHP, è veloce, scritto bene e non ha dipendenze.
   
 I vari test descritti di seguito usano la sintassi di lime. Funzionano in ogni installazione di symfony.
 
->**NOTA**
->Non si suppone che test unitari e funzionali siano avviati in produzione. Sono dei strumenti di sviluppo e come tali devono essere avviati nei computer degli sviluppatori e non nei server host.
+>**NOTE**
+>Non si suppone che test unitari e funzionali siano avviati in produzione. Sono degli strumenti di sviluppo e come tali devono essere avviati nei computer degli sviluppatori e non nei server.
 
 Test unitari
 ----------
 
-I test di symfony sono semplici file PHP che finiscono con `Test.php` e sono posizionati nella directory `test/unit/` dell'applicazione. Seguono una semplice e leggibile sintassi. 
+I test di symfony sono semplici file PHP che finiscono con `Test.php` e sono posizionati nella cartella `test/unit/` dell'applicazione. Seguono una semplice e leggibile sintassi. 
 
 ### Cosa dovrebbero fare i test unitari?
 
@@ -142,13 +142,13 @@ Metodo                                        | Descrizione
 `like($string, $regexp[, $msg])`              | Verifica che una stringa aderisca a una espressione regolare
 `unlike($string, $regexp[, $msg])`            | Verifica che una stringa non aderisca a una espressione regolare
 `cmp_ok($value1, $operator, $value2[, $msg])` | Confronta due valori con un operatore
-`isa_ok($variable, $type[, $msg])`            | Verifica il tipo di un argomento
+`isa_ok($variable, $type[, $msg])`            | Verifica il tipo di un parametro
 `isa_ok($object, $class[, $msg])`             | Verifica la classe di un oggetto
 `can_ok($object, $method[, $msg])`            | Verifica la disponibilità di un metodo per un oggetto o una classe
 `is_deeply($array1, $array2[, $msg])`         | Verifica che due array abbiano gli stessi valori
 `include_ok($file[, $msg])`                   | Verifica che un file esista e sia stato correttamente incluso
-`fail([$msg])`                                | Fallisce sempre--comodo per testare le eccezioni
-`pass([$msg])`                                | Passa sempre--comodo per testare le eccezioni
+`fail([$msg])`                                | Fallisce sempre: comodo per testare le eccezioni
+`pass([$msg])`                                | Passa sempre: comodo per testare le eccezioni
 `skip([$msg, $nb_tests])`                     | Conta come `$nb_tests` test (utile per i test condizionali)
 `todo([$msg])`                                | Conta come test (utile per i test ancora da scrivere)
 `comment($msg)`                               | Restituisce un commento ma non esegue test
@@ -219,7 +219,7 @@ Listato 15-3 - Testiamo i metodi dell'oggetto `lime_test`, in `test/unit/example
 
 Si troveranno molti altri esempi dell'utilizzo di questi metodi nei test unitari di symfony.
 
->**SUGGERIMENTO**
+>**TIP**
 >Ci si potrebbe chiedere perché si una un `is()` al posto di `ok()`. Il messaggio di errore mostrato da `is()` è molto più esplicito; Mostra entrambi i membri del test, mentre `ok()` dice solamente che la condizione fallisce.
 
 ### Parametri di test
@@ -274,9 +274,9 @@ Listato 15-5 - Avviare i test unitari
     $ php symfony test:unit foo/*                        ## Avvia barTest.php
     $ php symfony test:unit *                            ## Avvia tutti i test (ricorsivo)
 
-### Stubs, Fixtures e autocaricamento
+### Stub, fixture e autocaricamento
 
-In un test unitario la caratteristica dell'autocaricamento non è abilitato di default. Ogni classe che si usa in un test deve essere definita in un file di test o richiesta come dipendenza esterna. È il motivo per il quale molti file di test cominciano con una serie di inclusione di file, come mostrato nel listato 15-6
+In un test unitario, la caratteristica dell'autocaricamento non è inizialmente abilitata. Ogni classe che si usa in un test deve essere definita in un file di test o richiesta come dipendenza esterna. È il motivo per il quale molti file di test cominciano con una serie di inclusione di file, come mostrato nel listato 15-6
 
 Listato 15-6 - Includere classi nei test unitari
 
@@ -415,7 +415,7 @@ Listato 15-9 - Testare le classi di Propel
 
     $t = new lime_test(1, new lime_output_color());
 
-    // begin testing your model class
+    // inizio test delle classi del modello
     $t->diag('->retrieveByUsername()');
     $user = UserPeer::retrieveByUsername('fabien');
     $t->is($user->getLastName(), 'Potencier', '->retrieveByUsername() returns the User for the given username');
@@ -435,7 +435,7 @@ Listato 15-10 - Testare le classi di Doctrine
 
     $t = new lime_test(1, new lime_output_color());
 
-    // begin testing your model class
+    // inizio test delle classi del modello
     $t->diag('->retrieveByUsername()');
     $user = Doctrine::getTable('User')->findOneByUsername('fabien');
     $t->is($user->getLastName(), 'Potencier', '->findOneByUsername() returns the User for the given username');
@@ -443,15 +443,15 @@ Listato 15-10 - Testare le classi di Doctrine
 Test funzionali
 ----------------
 
-I test funzionali validano pezzi delle applicazioni. Sono in grado di simulare le sessioni di navigazione, fare richieste e controllare elementi della risposta proprio come si farebbe manualmente per per validare che un azione faccia effettivamente quello che ci si aspetta. Nei test funzionali si esegue uno scenario corrispondente a un caso d'uso.
+I test funzionali validano parti delle applicazioni. Sono in grado di simulare le sessioni di navigazione, fare richieste e controllare elementi della risposta, proprio come si farebbe manualmente per verificare che un'azione faccia effettivamente quello che ci si aspetta. Nei test funzionali si esegue uno scenario corrispondente a un caso d'uso.
 
 ### Come dovrebbero essere i test funzionali ?
 
-Si potrebbero eseguire test funzionali con un browser testuale e molte espressioni regolari di verifica, ma sarebbe un grande spreco di tempo. Symfony mette a disposizione un oggetto speciale, chiamato `sfBrowser`, che si comporta come un browser connesso all'applicazione symfony senza la reale necessità di un server- e senza il rallentamento dello scambio dati dell'HTTP. Fornisce l'accesso a tutti i principali oggetti di ogni richiesta ( la richiesta, la sessione, il context e l'oggetto risposta). Symfony mette a disposizione anche l'oggetto `sfTestFunctional`, progettato appositamente per i test funzionali. Esso prende l'oggetto `sfBrowser` e aggiunge alcuni metodi di asserzione.
+Si potrebbero eseguire test funzionali con un browser testuale e molte espressioni regolari di verifica, ma sarebbe un grande spreco di tempo. Symfony mette a disposizione un oggetto speciale, chiamato `sfBrowser`, che si comporta come un browser connesso all'applicazione symfony, senza la reale necessità di un server e senza il rallentamento dello scambio dati dell'HTTP. Fornisce l'accesso a tutti i principali oggetti di ogni richiesta (la richiesta, la sessione, il context e l'oggetto risposta). Symfony mette a disposizione anche l'oggetto `sfTestFunctional`, progettato appositamente per i test funzionali. Esso prende l'oggetto `sfBrowser` e aggiunge alcuni metodi di asserzione.
 
-Tipicamente un test funzionale comincia con l'inizializzazione di un oggetto browser. Questo oggetto fa una richiesta a una azione e verifica che alcuni elementi siano presenti nella risposta.
+Tipicamente, un test funzionale comincia con l'inizializzazione di un oggetto browser. Questo oggetto fa una richiesta a una azione e verifica che alcuni elementi siano presenti nella risposta.
 
-Per esempio, ogni volta che si genera un modulo dello skeleton con il comando `generate:module` o con `propel:generate-module`, symfony crea un test funzionale di base per questo modulo. Il test fa una richiesta all'azione di default del modulo e verifica il codice di stato della risposta, il modulo e l'azione calcolati dal sistema di routing, la presenza di alcuni  elementi nel contenuto della risposta. Per il modulo `foobar`, il file generato `foobarActionsTest.php` è simile al listato !5-11.
+Per esempio, ogni volta che si genera uno scheletro di modulo, con il comando `generate:module` o con `propel:generate-module`, symfony crea un test funzionale di base per questo modulo. Il test fa una richiesta all'azione principale del modulo e verifica il codice di stato della risposta, il modulo e l'azione calcolati dal sistema di routing, la presenza di alcuni elementi nel contenuto della risposta. Per il modulo `foobar`, il file generato `foobarActionsTest.php` è simile al listato 15-11.
 
 Listato 15-11 - Test funzionale di dafault per un nuovo modulo, in `tests/functional/frontend/foobarActionsTest.php`
 
@@ -476,7 +476,7 @@ Listato 15-11 - Test funzionale di dafault per un nuovo modulo, in `tests/functi
       end()
     ;
 
->**SUGGERIMENTO**
+>**TIP**
 >I metodi del browser restituiscono un oggetto `sfTestFunctional` quindi è possibile concatenare i metodi da chiamare per aumentare la leggibilità dei file. Questa modalità viene chiamata interfaccia fluida dell'oggetto, perché nulla ferma il flusso delle chiamate ai metodi.
 
 Un test funzionale può contenere differenti richieste e asserzioni più complesse. Vedremo di scoprire tutte le possibilità nelle prossime sezioni.
@@ -495,10 +495,10 @@ Listato 15-12 - Esecuzione di un singolo test funzionale da linea di comando
     # Looks like you failed 1 tests of 4.
     1..4
 
-Il test funzionale generato automaticamente alla creazione di un nuovo modulo fallisce di default. Questo perché in un nuovo modulo l'azione `index` inoltra alla pagina delle congratulazioni (inclusa nel modulo `default` di symfony), il test per questo modulo fallirà e questo garantisce che non si avranno tutti i test verdi senza aver completato tutti i moduli.
+Il test funzionale generato automaticamente alla creazione di un nuovo modulo fallisce. Questo perché in un nuovo modulo l'azione `index` inoltra alla pagina delle congratulazioni (inclusa nel modulo `default` di symfony), il test per questo modulo fallirà e questo garantisce che non si avranno tutti i test verdi senza aver completato tutti i moduli.
 
->**NOTA**
->Nei test funzionali, l'autocaricamento è attivato, quindi non è necessario aggiungere alcun file a mano.
+>**NOTE**
+>Nei test funzionali l'autocaricamento è attivato, quindi non è necessario aggiungere alcun file a mano.
 
 ### Navigare con l'oggetto `sfBrowser`
 
@@ -529,24 +529,24 @@ Una tipica sessione di navigazione non contiene sono delle richieste a delle spe
 Listato 15-14 - Simulazione della navigazione con l'oggetto `sfBrowser`
 
     [php]
-    $b->get('/');                  // Request to the home page
+    $b->get('/');                  // Richiesta dell'home page
     $b->get('/foobar/show/id/1');
-    $b->back();                    // Back to one page in history
-    $b->forward();                 // Forward one page in history
-    $b->reload();                  // Reload current page
-    $b->click('go');               // Look for a 'go' link or button and click it
+    $b->back();                    // Indietro di una pagina nella cronologia
+    $b->forward();                 // Avanti nella cronologia
+    $b->reload();                  // Ricarica la pagina corrente
+    $b->click('go');               // Cerca un collegamento "go" e lo clicca
 
-Il browser gestisce lo stack delle chiamate, in questo modo i metodi `back()` e `forward()` lavorano come lo farebbero in un browser reale.
+Il browser gestisce lo stack delle chiamate, in questo modo i metodi `back()` e `forward()` lavorano come farebbero in un browser reale.
 
->**SUGGERIMENTO**
->Il browser ha i suoi meccanismi per gestire le sessioni (`sfTestStorage`) e i Cookie
+>**TIP**
+>Il browser ha i suoi meccanismi per gestire le sessioni (`sfTestStorage`) e i cookie
 
-Tra le interazioni che necessitano di essere maggiormente testate ci sono probabilmente per prime quelle relative hai form. Per simulare la compilazione di un form e il suo invio, si hanno a disposizione tre scelte. È possibile fare una richiesta post con i parametri che si desidera inviare, chiamare il metodo `click()` con i parametri del form passati come array, oppure riempire i campi uno per uno e cliccare il bottone di invio. Tutti si equivalgono nella stessa richiesta POST. Mostriamo nel listato 15-15 un esempio
+Tra le interazioni che necessitano di essere maggiormente testate, ci sono probabilmente per prime quelle relative ai form. Per simulare la compilazione di un form e il suo invio, si hanno a disposizione tre scelte. È possibile fare una richiesta post con i parametri che si desidera inviare, chiamare il metodo `click()` con i parametri del form passati come array, oppure riempire i campi uno per uno e cliccare il bottone di invio. Tutti si equivalgono nella stessa richiesta POST. Mostriamo nel listato 15-15 un esempio
 
 Listato 15-15 - Simulare gli input del form con l'oggetto `sfBrowser`
 
     [php]
-    // Example template in modules/foobar/templates/editSuccess.php
+    // Template di esempio in modules/foobar/templates/editSuccess.php
     <?php echo form_tag('foobar/update') ?>
       <input type="hidden" name="id" value="<?php echo $sf_params->get('id') ?>" />
       <input type="text" name="name" value="foo" />
@@ -555,29 +555,29 @@ Listato 15-15 - Simulare gli input del form con l'oggetto `sfBrowser`
       <textarea name="text2">bar</textarea>
     </form>
 
-    // Example functional test for this form
+    // Esempio di test funzionale per questo form
     $b = new sfBrowser();
     $b->get('/foobar/edit/id/1');
 
-    // Option 1: POST request
+    // Opzione 1: richiesta POST 
     $b->post('/foobar/update', array('id' => 1, 'name' => 'dummy', 'commit' => 'go'));
 
-    // Option 2: Click the submit button with parameters
+    // Opzione 2: cliccare il pulsante submit con dei parametri
     $b->click('go', array('name' => 'dummy'));
 
-    // Option 3: Enter the form values field by field name then click the submit button
+    // Opzione 3: inseriri i valori del form campo per campo, poi cliccare il pulsante submit
     $b->setField('name', 'dummy')->
         click('go');
 
->**NOTA**
->Con la seconda e la terza opzione, i valori di default del form sono automaticamente inclusi nell'invio del form e non è necessario stabilire il target del form.
+>**NOTE**
+>Con la seconda e la terza opzione, i valori predefiniti del form sono automaticamente inclusi nell'invio del form e non è necessario stabilire il target del form.
 
-Quando un azione si conclude con il `redirect()`, il browser non è automaticamente in grado di seguire il redirezionamento; è necessario seguirlo manualmente con il metodo `followRedirect()`, come mostrato nel listato 15-16.
+Quando un'azione si conclude con il `redirect()`, il browser non è automaticamente in grado di seguire il redirezionamento; è necessario seguirlo manualmente con il metodo `followRedirect()`, come mostrato nel listato 15-16.
 
 Listato 15-16 - Il Browser non segue automaticamente i redirezionamenti
 
     [php]
-    // Example action in modules/foobar/actions/actions.class.php
+    // Azione di esempio in modules/foobar/actions/actions.class.php
     public function executeUpdate($request)
     {
       // ...
@@ -585,11 +585,11 @@ Listato 15-16 - Il Browser non segue automaticamente i redirezionamenti
       $this->redirect('foobar/show?id='.$request->getParameter('id'));
     }
 
-    // Example functional test for this action
+    // Esempio di test funzionale per questo form
     $b = new sfBrowser();
     $b->get('/foobar/edit?id=1')->
         click('go', array('name' => 'dummy'))->
-        followRedirect();    // Manually follow the redirection
+        followRedirect();    // Seguire la redirezione manualmente
 
 Uno degli ultimi metodi che bisognerebbe conoscere per la sua utilità è `restart()`. Tale metodo reinizializza la cronologia della navigazione, le sessioni i cookie, come se si riavviasse il browser.
 
@@ -619,7 +619,7 @@ Listato 15-17 - Il Browser fornisce abilità aggiuntive attraverso il metodo `te
     $b->test()->is($response->getHttpHeader('content-type'), 'text/html;charset=utf-8');
     $b->test()->like($response->getContent(), '/edit/');
 
->**NOTA**
+>**NOTE**
 >I metodi `getResponse()`, `getContext()`, `getRequest()` e`test()` non restituiscono un oggetto `sfBrowser` pertanto non è possibile concatenare altri metodi del `sfBrowser` dopo di loro.
 
 Si possono verificare i cookie entranti e uscenti facilmente attraverso gli oggetti di richiesta e risposta, come mostrato nel listato 15-16
@@ -627,11 +627,11 @@ Si possono verificare i cookie entranti e uscenti facilmente attraverso gli ogge
 Listato 15-16 - Testare i Cookie con `sfBrowser`
 
     [php]
-    $b->test()->is($request->getCookie('foo'), 'bar');     // Incoming cookie
+    $b->test()->is($request->getCookie('foo'), 'bar');     // Cookie in entrata
     $cookies = $response->getCookies();
-    $b->test()->is($cookies['foo'], 'foo=bar');            // Outgoing cookie
+    $b->test()->is($cookies['foo'], 'foo=bar');            // Cookie in uscita
 
-Usare il metodo `test()` per testare l'elemento richiesta sarebbe molto pesante. Fortunatamente, `sfTestFunctional` contiene alcuni metodi proxy che aiutano a mantenere i test funzionali leggibili e leggeri- in aggiunta restituiscono un oggetto `sfTestFunctional`. Per esempio è possbile riscrivere il listato 15-15 in modo più veloce, come mostrato nel listato 15-18.
+Usare il metodo `test()` per testare l'elemento richiesta sarebbe molto pesante. Fortunatamente, `sfTestFunctional` contiene alcuni metodi proxy, che aiutano a mantenere i test funzionali leggibili e leggeri; in aggiunta restituiscono un oggetto `sfTestFunctional`. Per esempio è possbile riscrivere il listato 15-15 in modo più veloce, come mostrato nel listato 15-18.
 
 Listato 15-18 - Testare direttamente con `sfTestFunctional`
 
@@ -648,7 +648,7 @@ Listato 15-18 - Testare direttamente con `sfTestFunctional`
 
 Ogni metodo proxy fa parte del gruppo dei tester. L'utilizzo di un gruppo di tester è abilitato utilizzando le chiamate tra i metodi `with()` e `end()`. Il metodo `with()` stabilisce il tester del gruppo ( come `request` e `response`  ).
 
-Il codice di ritorno 200 è quello di default che viene utilizzato con il metodo `isStatusCode()` quando viene chiamato senza argomenti.
+Il codice di ritorno 200 è quello predefinito, che viene utilizzato con il metodo `isStatusCode()` quando viene chiamato senza parametri.
 
 Un altro vantaggio dei metodi proxy è che non è necessario specificare un testo di output come si farebbe con i metodi di `lime_test`. I messaggi sono generati automaticamente dai metodi proxy e il testo di output è chiaro e leggibile.
 
@@ -728,7 +728,7 @@ Listato 15-22 - Il Browser test fornisce acceso agli elementi della risposta con
       end()
     ;
 
-Il comportamento del metodo `checkElement()` dipendono dal tipo del secondo argomento che può essere:
+Il comportamento del metodo `checkElement()` dipendono dal tipo del secondo parametro, che può essere:
 
   * Se si tratta di un booleano, controlla che esista un corrispondente selettore CSS.
   * Se si tratta di un intero, verifica che il selettore CSS restituisca il numero dei risultati.
@@ -787,9 +787,9 @@ Listato 15-26 - Testare le eccezioni
 
 ### Lavorare nell'ambiente di test
 
-L'oggetto `sfTestFunctional`  utilizza un front controller speciale impostato sull'ambiente `test`. La configurazione di default per questo ambiente appare nel listato 15-27.
+L'oggetto `sfTestFunctional` utilizza un front controller speciale impostato sull'ambiente `test`. La configurazione predefinita per questo ambiente appare nel listato 15-27.
 
-Listato 15-27 - Configurazione di default dell'ambiente di test in `frontend/config/settings.yml`
+Listato 15-27 - Configurazione predefinita dell'ambiente di test in `frontend/config/settings.yml`
 
     test:
       .settings:
@@ -801,7 +801,7 @@ Listato 15-27 - Configurazione di default dell'ambiente di test in `frontend/con
 
 In questo ambiente la cache e la web debug toolbar sono impostate a `false`. Tuttavia, l'esecuzione del codice lascia ancora tracce in un file di log, diverso dai file di log `dev` e `prod`, in modo da poter controllare in modo indipendente l'esecuzione (`myproject / log / frontend_test.log»). In questo ambiente le eccezioni non interrompono l'esecuzione degli script - in modo che sia possibile eseguire tutta una serie di test anche se uno non riesce. Si possono avere delle specifiche impostazioni di connessione per il database, per esempio, per usare un altro database che contenga i dati di test.
 
-Prima di utilizzare l'oggetto `sfBrowser` è necessario inizializzarlo. Se necessario, è possibile specificare un hostname per l'applicazione e un indirizzo IP per il client - nel caso l'applicazione dovesse fare controlli su questi due parametri. Vediamo come si fa nel listato 15-28.
+Prima di utilizzare l'oggetto `sfBrowser` è necessario inizializzarlo. Se necessario, è possibile specificare un hostname per l'applicazione e un indirizzo IP per il client, nel caso l'applicazione dovesse fare controlli su questi due parametri. Vediamo come si fa nel listato 15-28.
 
 Listato 15-28 - Impostare il browser con un hostname e un IP
 
@@ -810,7 +810,7 @@ Listato 15-28 - Impostare il browser con un hostname e un IP
 
 ### Il task `test:functional`
 
-Il task `test: functional`  può eseguire uno o più test funzionali a seconda del numero di argomenti che riceve. Le regole sono molto simili a quelle del task `test: unit`, salvo che i task del test funzionale si aspetta sempre il nome di un'applicazione come primo argomento, come mostrato nella listato 15-29.
+Il task `test: functional` può eseguire uno o più test funzionali, a seconda del numero di parametri che riceve. Le regole sono molto simili a quelle del task `test: unit`, salvo che i task del test funzionali si aspetta sempre il nome di un'applicazione come primo parametro, come mostrato nella listato 15-29.
 
 Listato 15-29 - Sintassi del task dei test funzionali
 
@@ -885,13 +885,13 @@ Listato 15-32 - Esempio di nomenclatura corretta dei test funzionali
       end()
     ;
 
-    # get /comment/index
+    # get /foobar/index
     ok 1 - status code is 200
     ok 2 - request parameter module is foobar
     ok 3 - request parameter action is index
     ok 4 - response selector body matches regex /foobar/
 
-Seguendo questa convenzione il risultato dei test sarà chiaro tanto da poter essere usato come documentazione per i sviluppatori del progetto. A volte i test posso essere esplicativi, tanto  da rendere inutile la documentazione.
+Seguendo questa convenzione, il risultato dei test sarà chiaro tanto da poter essere usato come documentazione per i sviluppatori del progetto. A volte i test posso essere esplicativi, tanto  da rendere inutile la documentazione.
 
 Necessità speciali dei test
 ---------------------------
@@ -916,9 +916,9 @@ Listato 15-33 - Lanciare un insieme di test
     unit/foo/barTest.php               0      2      2  62 63
     Failed 1/3 test scripts, 66.66% okay. 2/53 subtests failed, 96.22% okay.
 
-I test sono eseguiti allo stesso modo di quando sono chiamati singolarmente, solo l'output è sintetico per maggiore utilità. In particolare, il resoconto finale focalizza su i test che hanno fallito e aiuta a trovarli.
+I test sono eseguiti allo stesso modo di quando sono chiamati singolarmente, solo l'output è sintetico per maggiore utilità. In particolare, il resoconto finale focalizza sui test che hanno fallito e aiuta a trovarli.
 
-Si possono lanciare tutti i test con una sola chiamata utilizzando il task `test:all` come mostrato nel listato 15-34. Questa attività andrebbe fatta ogni volta che si trasferiscono i file all'ambiente di produzione per garantire che non ci siano comparsi errori di regressione dopo l'ultima release
+Si possono lanciare tutti i test con una sola chiamata, utilizzando il task `test:all`, come mostrato nel listato 15-34. Questa attività andrebbe fatta ogni volta che si trasferiscono i file all'ambiente di produzione, per garantire che non ci siano comparsi errori di regressione dopo l'ultimo rilascio.
 
 Listato 15-34 - Lanciare tutti i test del progetto
 
@@ -926,7 +926,7 @@ Listato 15-34 - Lanciare tutti i test del progetto
 
 ### Accesso al database
 
-I test unitari spesso hanno necessità di accedere al database. La connessione al database è automaticamente instanziato quando si chiama `sfBrowser::get()` per la prima volta. Comunque, se si vuole l'accesso al database anche prima dell'utilizzo di `sfBrowser` è necessario inizializzare manualmente l'oggetto `sfDabataseManager` come mostrato nel listato 15-35
+I test unitari spesso hanno necessità di accedere al database. La connessione al database è automaticamente instanziata quando si chiama `sfBrowser::get()` per la prima volta. Comunque, se si vuole l'accesso al database anche prima dell'utilizzo di `sfBrowser` è necessario inizializzare manualmente l'oggetto `sfDabataseManager`, come mostrato nel listato 15-35
 
 Listato 15-35 - Inizializzazione del database in un test
 
@@ -988,7 +988,7 @@ Listato 15-37 - Testare la cache con il metodo `isCached()`
     $b->with('view_cache')->isCached(true, true); // Verifica che la risposta in cache abbia il layout
     $b->with('view_cache')->isCached(false);      // Verifica che la risposta non provenga dalla cache
 
->**NOTA**
+>**NOTE**
 >Non è necessario cancellare la cache all'inizio di un test funzionale, lo script di bootstrap lo fa automaticamente.
 
 ### Testare le interazioni con il client
@@ -997,10 +997,10 @@ Lo svantaggio principale delle tecniche descritte in precedenza è che non posso
 
 La soluzione si chiama [Selenium](http://seleniumhq.org/), un framework di test scritto interamente in JavaScript. Esegue una serie di azioni su una pagina proprio come farebbe un normale utente. Il vantaggio rispetto all'oggetto `sfBrowser` è che Selenium è in grado di eseguire il codice JavaScript in modo da poter testare anche le interazioni Ajax che avvengono con la pagina.
 
-Selenium non è distribuito di default con symfony. Per installarlo, è necessario creare un nuova cartella  `Selenium/` dentro alla cartella  `web/` e decomprimere il contenuto del pacchetto in questa cartella [archive](http://seleniumhq.org/download/). Questo è perché Selenium si basa su JavaScript e le impostazioni standard di sicurezza  della maggior parte dei browser prevede di non far girare codice che non sia disponibile nello stesso host.
+Selenium non è distribuito con symfony. Per installarlo, è necessario creare un nuova cartella  `Selenium/` dentro alla cartella  `web/` e decomprimere il contenuto del pacchetto in questa cartella [archive](http://seleniumhq.org/download/). Questo perché Selenium si basa su JavaScript e le impostazioni standard di sicurezza della maggior parte dei browser prevedono di non far girare codice che non sia disponibile nello stesso host.
 
 >**ATTENZIONE**
->Attenzione a non trasferire la cartella `selenium/` nel server di produzione, poiché permetterà l'accesso come root a tutti i documenti web attraverso il browser.
+>Attenzione a non trasferire la cartella `selenium/` nel server di produzione, poiché permetterà l'accesso a tutti i documenti web attraverso il browser.
 
 I test di Selenium sono scritti in HTML e si trovano nella cartella `web/selenium/tests/`. Per esempio, il listato 15-38 mostra un test funzionale nel quale la pagina è caricata, il link "click me" è cliccato e il testo "Hello, World" è mostrato come risposta. Notare bene che, per poter accedere all'applicazione in ambiente `test`, si deve specificare il controller `frontend_test.php`.
 
@@ -1029,31 +1029,31 @@ Un caso di test è rappresentato da un documento HTML contenente un tabella con 
 
 È inoltre necessario aggiungere questo test nel insieme dei test inserendo una nuova riga nella tabella nel file `TestSuite.html` posizionato nella stessa cartella. Il listato 15-39 mostra come.
 
-Listato 15-39 - Adding a Test File to the Test Suite, in `web/selenium/test/TestSuite.html`
+Listato 15-39 - Aggiunere un nuovo file ai test, in `web/selenium/test/TestSuite.html`
 
     ...
     <tr><td><a href='./testIndex.html'>My First Test</a></td></tr>
     ...
 
-Per avviare i test posizionarsi semplicemente con il browser sulla pagina
+Per avviare i test, posizionarsi semplicemente con il browser sulla pagina
 
     http://myapp.example.com/selenium/index.html
 
-Dopo aver selezionato il test cliccare sul bottone corrispondente per avviare i test correlati. Il browser riprodurrà passo passo tutti i comandi che gli sono impartiti dai test.
+Dopo aver selezionato il test, cliccare sul bottone corrispondente per avviare i test correlati. Il browser riprodurrà passo passo tutti i comandi che gli sono impartiti dai test.
 
->**NOTA**
->Poiché i test di Selenium sono lanciati all'interno di un browser reale ciò permette anche di testare le inconsistente che si possono verificare con i diversi browser. Quindi creare il proprio test e verificarlo su tutti i browser nei quali si presuppone che l'applicazione sia utilizzata. 
+>**NOTE**
+>Poiché i test di Selenium sono lanciati all'interno di un browser, è possibile testare le incoerenze che si possono verificare con i diversi browser. Quindi creare il proprio test e verificarlo su tutti i browser nei quali si presuppone che l'applicazione sia utilizzata. 
 
-Il fatto che i test di Selenium siano scritti in HTML potrebbe rendere la loro scrittura un seccatura. Fortunatamente grazie all'[estensione Selenium per Firefox](http://seleniumhq.org/projects/ide/), per creare un test è sufficiente far partire la registrazione della sessione ed effettuare le azioni normalmente sul browser. In più nel menù contestuale che si ottiene con il click destro si possono avere dei comandi avanzati come la verifica dell'esistenza di un particolare testo.
+Il fatto che i test di Selenium siano scritti in HTML potrebbe rendere la loro scrittura un seccatura. Fortunatamente, grazie all'[estensione Selenium per Firefox](http://seleniumhq.org/projects/ide/), per creare un test è sufficiente far partire la registrazione della sessione ed effettuare le azioni normalmente sul browser. In più nel menù contestuale che si ottiene con il click destro si possono avere dei comandi avanzati come la verifica dell'esistenza di un particolare testo.
 
 È possibile salvare i test in un file HTML per creare un insieme di test per la propria applicazione. L'estensione di Firefox permette anche di ri-eseguire test registrati in precedenza.
 
->**NOTA**
+>**NOTE**
 >Attenzione a non dimenticare di re-inizializzare i dati di test prima di lanciare i test di Selenium
 
 Riepilogo
--------
+---------
 
-I test automatici includono test unitari per validare metodi o funzioni e test funzionali per validare funzionalità. Symfony si basa sul framework di testing lime per i test unitari e fornisce le classi `sfBrowser` e `sfTestFunctional` per i test funzionali. Questi mettono a disposizione molti metodi di asserzione dai più semplici ai più avanzati, come i selettori CSS. Inoltre viene fornita la possibilità di lanciare i test di symfony da riga di comando, sia uno per uno (con il task `test: unit` e `test: functional`) o tutti insieme (con il task `test: all`). Relativamente ai dati i test automatici utilizzano fixture e stub che sono facilmente gestiti con symfony nei test unitari.
+I test automatici includono test unitari per validare metodi o funzioni e test funzionali per validare funzionalità. Symfony si basa sul framework di test lime per i test unitari e fornisce le classi `sfBrowser` e `sfTestFunctional` per i test funzionali. Questi mettono a disposizione molti metodi di asserzione dai più semplici ai più avanzati, come i selettori CSS. Inoltre viene fornita la possibilità di lanciare i test di symfony da riga di comando, sia uno per uno (con il task `test: unit` e `test: functional`) o tutti insieme (con il task `test: all`). Relativamente ai dati, i test automatici utilizzano fixture e stub che sono facilmente gestiti con symfony nei test unitari.
 
 Se si è sicuri di scrivere test unitari a sufficienza per coprire la maggior parte della propria applicazione (magari utilizzando la metodologia TDD) le operazioni di rifattorizzazione o di aggiunta di nuove funzionalità saranno fatte con più sicurezza. Inoltre si guadagna anche del tempo, perché, come abbiamo visto, i test sono una buona alternativa alla documentazione.

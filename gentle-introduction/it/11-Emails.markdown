@@ -49,7 +49,7 @@ L'invio di un'email è semplice, utilizzando il metodo ~`sfAction::composeAndSen
       'Body'
     );
 
-Il metodo `composeAndSend()` richiede quattro argomenti:
+Il metodo `composeAndSend()` richiede quattro parametri:
 
  * l'indirizzo del mittente (`from`);
  * l'indirizzo del/i destinatario/i (`to`);
@@ -81,8 +81,8 @@ di email come secondo parametro del metodo:
 
 ### Modalità flessibile
 
-Se si desiderasse maggior flessibilità è possibile utilizzare il metodo ~`sfAction::compose()`~
-per creare il messaggio, personalizzarlo nella maniera più appropriata e eventualmente inviarlo
+Se si desiderasse maggior flessibilità, è possibile utilizzare il metodo ~`sfAction::compose()`~
+per creare il messaggio, personalizzarlo nella maniera più appropriata ed eventualmente inviarlo.
 Ciò è utile, per esempio, qualora si avesse bisogno di aggiungere un ~allegato~, come mostrato di seguito:
 
     [php]
@@ -119,7 +119,7 @@ Ciò è utile, per esempio, qualora si avesse bisogno di aggiungere un ~allegato
 ### Utilizzo della vista di symfony
 
 L'invio delle email dall'azione permette di far leva in modo piuttosto semplice sulla potenza
-dei partial e component:
+di partial e component:
 
     [php]
     $message->setBody($this->getPartial('partial_name', $arguments));
@@ -147,7 +147,7 @@ nel file di configurazione `factories.yml'. La configurazione predefinita è la 
             password:   ~
 
 Quando viene creata una nuova applicazione, il file di configurazione locale `factories.yml`
-sovrascrive la configurazione predefinita con dei valore predefiniti in base
+sovrascrive la configurazione predefinita con dei valori predefiniti in base
 agli ambienti `prod`, `env` e `test`:
 
     [yml]
@@ -169,7 +169,7 @@ la strategia d'invio. Essa permette di indicare a symfony
 come inviare i messaggi email ed è configurata tramite il il parametro ~`delivery_strategy`~
 del file `factories.yml`. La strategia cambia il comportamento
 del metodo ~`send()`|`sfMailer::send()`~. Sono disponibili quattro diverse strategie predefinite,
-che dovrebbero soddisfare esigenze comuni:
+che dovrebbero soddisfare le esigenze più comuni:
 
  * `realtime`:       I messaggi vengono inviati in tempo reale.
  * `single_address`: I messaggi vengono inviati a un singolo indirizzo.
@@ -231,7 +231,7 @@ vengono passati al costruttore della classe stessa. Di seguito vengono mostrate 
     * Il nome della colonna utilizzata per memorizzare il messaggio (`message` come predefinito)
 
     * Il metodo da chiamare per ottenere il messaggio da inviare (opzionale). 
-      Riceve le opzione della coda come argomento.
+      Riceve le opzione della coda come parametro.
 
  * `Swift_PropelSpool`:
 
@@ -240,7 +240,7 @@ vengono passati al costruttore della classe stessa. Di seguito vengono mostrate 
     * Il nome della colonna da utilizzare per memorizzare  il messaggio (`message` come predefinito)
 
     * Il metodo da chiamare per ottenere il messaggio da inviare (opzionale). 
-      Riceve le opzione della coda come argomento.
+      Riceve le opzione della coda come parametro.
     
 Di seguito una classica configurazione per Doctrine:
 
@@ -311,7 +311,7 @@ Il task `project:send-emails` può ricevere due parametri opzionali:
 
  * `time-limit`: Tempo limite utile per l'invio dei messaggi (in secondi).
 
-Entrambe le opzioni possono essere utilizate contemporaneamente:
+Entrambe le opzioni possono essere utilizzate contemporaneamente:
 
   $ php symfony project:send-emails --message-limit=10 --time-limit=20
 
@@ -439,7 +439,7 @@ e ~`checkBody()`~ :
       end()
     ;
 
-Il secondo argomento di `checkHeader()` e il primo argomento di `checkBody()`
+Il secondo parametro di `checkHeader()` e il primo parametro di `checkBody()`
 può essere uno dei seguenti:
 
  * una stringa per controllare un'esatta corrispondenza;
@@ -551,7 +551,7 @@ Ovviamente può risultare conveniente aggiungere una classe base per centralizza
     }
 
 Qualora un messaggio dipendesse da oggetti del modello, è possibile passarli
-come argomenti al costruttore:
+come parametri al costruttore:
 
     [php]
     // lib/email/ProjectConfirmationMessage.class.php

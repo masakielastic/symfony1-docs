@@ -1,7 +1,7 @@
 Capitolo 17 - Estendere symfony
 ===============================
 
-A volte è necessario modificare il comportamento di symfony. Può accadere di dover modificare il modo in cui una certa classe si comporta o aggiungere delle caratteristiche personalizzate e ciò avverrà inevitabilmente perché ogni cliente ha esigenze specifiche che nessun framework può prevedere. In realtà, questa situazione è così comune che symfony fornisce un meccanismo per estendere classi esistenti in fase di runtime, al di là della semplice ereditarietà delle classi. È anche possibile sostituire le classi del core di symfony modificando le impostazioni di fabbrica. Una volta si è scrita una estensione, si può facilmente pacchettizzarla come plug-in, in modo che possa essere riutilizzata in altre applicazioni, o da altri utenti di symfony.
+A volte è necessario modificare il comportamento di symfony. Può accadere di dover modificare il modo in cui una certa classe si comporta o aggiungere delle caratteristiche personalizzate e ciò avverrà inevitabilmente perché ogni cliente ha esigenze specifiche che nessun framework può prevedere. In realtà, questa situazione è così comune che symfony fornisce un meccanismo per estendere classi esistenti in fase di runtime, al di là della semplice ereditarietà delle classi. È anche possibile sostituire le classi del nucleo di symfony modificando le impostazioni di fabbrica. Una volta si è scrita una estensione, si può facilmente pacchettizzarla come plugin, in modo che possa essere riutilizzata in altre applicazioni, o da altri utenti di symfony.
 
 Eventi
 ------
@@ -27,7 +27,7 @@ Listato 17-1 - Registrare un ascoltatore di eventi
       // fa qualcosa con la cultura dell'utente
     }
 
-Tutti gli eventi e le registrazioni degli ascoltatori sono gestiti da un oggetto speciale chiamato *dispatcher di eventi*. Questo oggetto è disponibile ovunque in symfony attraverso l'istanza di `ProjectConfiguration` e la maggior parte degli oggetti di symfony offrono un metodo `getEventDispatcher()` per accedervi direttamente. Utilizzando il metodo `connect()` del dispatcher, è possibile registrare qualsiasi callable PHP (o un metodo di classe o una funzione) da chiamare quando si verifica un evento. Il primo argomento di `connect()` è l'identificatore dell'evento, che è una stringa composta da uno spazio nomi e da un nome. Il secondo argomento è un callable PHP.
+Tutti gli eventi e le registrazioni degli ascoltatori sono gestiti da un oggetto speciale chiamato *dispatcher di eventi*. Questo oggetto è disponibile ovunque in symfony attraverso l'istanza di `ProjectConfiguration` e la maggior parte degli oggetti di symfony offrono un metodo `getEventDispatcher()` per accedervi direttamente. Utilizzando il metodo `connect()` del dispatcher, è possibile registrare qualsiasi callable PHP (o un metodo di classe o una funzione) da chiamare quando si verifica un evento. Il primo parametro di `connect()` è l'identificatore dell'evento, che è una stringa composta da uno spazio nomi e da un nome. Il secondo parametro è un callable PHP.
 
 >**Note**
 >Recuperare il dispatcher degli eventi da un qualsiasi punto dell'applicazione:
@@ -82,7 +82,7 @@ Listato 17-2 - Notificare un ascoltatore di eventi
       }
     }
 
-Il metodo `notify()` del dispatcher di eventi si aspetta un oggetto `sfEvent` come argomento; è l'oggetto stesso che viene passato agli ascoltatori di eventi. Questo oggetto porta sempre un riferimento al notificatore (è per questo che l'istanza dell'evento viene inizializzata con `this`) e un identificativo di evento. Facoltativamente, accetta un array associativo di parametri, dando agli ascoltatori un modo per interagire con la logica del notificante.
+Il metodo `notify()` del dispatcher di eventi si aspetta un oggetto `sfEvent` come parametro; è l'oggetto stesso che viene passato agli ascoltatori di eventi. Questo oggetto porta sempre un riferimento al notificatore (è per questo che l'istanza dell'evento viene inizializzata con `this`) e un identificativo di evento. Facoltativamente, accetta un array associativo di parametri, dando agli ascoltatori un modo per interagire con la logica del notificante.
 
 ### Notifica di un evento al dispatcher finché un ascoltatore lo prende in carico
 
@@ -204,16 +204,16 @@ Listato 17-5 - Notifica e gestione di un evento filtro
 
 ### Eventi predefiniti
 
-Molte classi di symfony hanno eventi predefiniti, che permettono si estendere il framework senza modificare necessariamente le classi stesse. La Tabella 17-1 elenca questi eventi, insieme ai loro tipi e argomenti.
+Molte classi di symfony hanno eventi predefiniti, che permettono si estendere il framework senza modificare necessariamente le classi stesse. La Tabella 17-1 elenca questi eventi, insieme ai loro tipi e i loro parametri.
 
 Tabella 17-1 - Gli eventi di symfony
 
-| **Nome dell'evento** (**Tipo**)                | **Notificatori**              | **Argomenti**               |
+| **Nome dell'evento** (**Tipo**)                | **Notificatori**              | **Parametri**               |
 | ---------------------------------------------- | ----------------------------- | --------------------------- |
 | application.log (notify)                       | numerose classi               | priority                    |
 | application.throw_exception (notifyUntil)      | sfException                   | -                           |
 | autoload.filter_config (filter)                | sfAutoloadConfigHandler       | -                           |
-| command.log (notify)                           | sfCommand* classes            | priority                    |
+| command.log (notify)                           | classi sfCommand*             | priority                    |
 | command.pre_command (notifyUntil)              | sfTask                        | arguments, options          |
 | command.post_command (notify)                  | sfTask                        | -                           |
 | command.filter_options (filter)                | sfTask                        | command_manager             |
@@ -296,7 +296,7 @@ I plugin (vedere sotto) possono registrare i propri ascoltatori di eventi. Dovre
 Factory
 -------
 
-Factory è la definizione di una classe per un determinato compito. Symfony per le sue caratteristiche del core, come la gestione del controllore e della sessione, si basa su factory. Ad esempio, quando il framework deve creare un oggetto per un nuova richiesta, cerca nella definizione del factory il nome della classe da utilizzare a tale scopo. La definizione predefinita del factory per le richieste è `sfWebRequest`, quindi symfony crea un oggetto di questa classe, al fine di gestire le richieste. Il grande vantaggio di utilizzare una definizione del factory è che è molto facile alterare le caratteristiche core del framework: basta cambiare la definizione del factory e symfony userà la classe personalizzata per la richiesta, invece della sua.
+Factory è la definizione di una classe per un determinato compito. Symfony per le sue caratteristiche del nucleo, come la gestione del controllore e della sessione, si basa su factory. Ad esempio, quando il framework deve creare un oggetto per un nuova richiesta, cerca nella definizione del factory il nome della classe da utilizzare a tale scopo. La definizione predefinita del factory per le richieste è `sfWebRequest`, quindi symfony crea un oggetto di questa classe, al fine di gestire le richieste. Il grande vantaggio di utilizzare una definizione del factory è che è molto facile alterare le caratteristiche principali del framework: basta cambiare la definizione del factory e symfony userà la classe personalizzata per la richiesta, invece della sua.
 
 Le definizioni dei factory sono memorizzate nel file di configurazione `factories.yml`. Il listato 17-7 mostra il file con le definizioni predefinite dei factory. Ogni definizione è costituita dal nome di una classe autocaricata e (opzionalmente) da un insieme di parametri. Per esempio, il factory per la memorizzazione delle sessioni (impostata sotto la chiave `storage:`), utilizza un parametro `session_name` per dare un nome al cookie creato sul computer client, che consente le sessioni persistenti.
 
@@ -358,7 +358,7 @@ Listato 17-8 - Sovrascrivere i factory
       // Codice qui
     }
 
-    // Dechiarare questa classe come factory per la request in factories.yml
+    // Dichiarare questa classe come factory per la request in factories.yml
     all:
       request:
         class: myRequest
@@ -370,7 +370,7 @@ Probabilmente capiterà di dover riutilizzare parte di codice che si è sviluppa
 
 I plugin offrono un modo per pacchettizzare il codice sparso su più file e di riutilizzarlo su diversi progetti. In un plugin, è possibile inserire classi, filtri, ascoltatori di eventi, helper, configurazioni, task, moduli, schemi ed estensioni del modello, fixture, le risorse web, ecc. I plugin sono facili da installare, aggiornare e disinstallare. Possono essere distribuiti come un archivio .tgz`, un pacchetto PEAR, o un semplice checkout da un repository di codice. I plugin con pacchetti PEAR hanno il vantaggio di gestire le dipendenze, essere più facili da aggiornare e sono rilevati automaticamente. I meccanismi di caricamento di symfony tengono in considerazione i plugin e le funzionalità offerte da un plugin sono disponibili nel progetto come se il codice del plugin facesse parte del framework.
 
-Quindi, fondamentalmente, un plugin è una estensione pacchettizzata per un progetto symfony. Con i plugin, non solo è possibile riutilizzare il proprio codice tra le applicazioni, ma si possono anche riutilizzare sviluppi fatti da altri contributori e aggiungere estensioni di terze parti al core di symfony.
+Quindi, fondamentalmente, un plugin è una estensione pacchettizzata per un progetto symfony. Con i plugin, non solo è possibile riutilizzare il proprio codice tra le applicazioni, ma si possono anche riutilizzare sviluppi fatti da altri contributori e aggiungere estensioni di terze parti al nucleo di symfony.
 
 ### Cercare i plugin di symfony
 
@@ -380,7 +380,7 @@ Il sito web del progetto symfony ha una sezione dedicata ai plugin che è access
 
 Ciascun plugin elencato ha la propria pagina, con dettagliate istruzioni per l'installazione e documentazione sull'utilizzo.
 
-Alcuni di questi plugin sono stati creati dalla comunità, mentre altri provengono dagli sviluppatori del core di symfony. Tra questi ultimi, ci sono i seguenti:
+Alcuni di questi plugin sono stati creati dalla comunità, mentre altri provengono dagli sviluppatori del nucleo di symfony. Tra questi ultimi, ci sono i seguenti:
 
   * `sfFeed2Plugin`: Automatizza la manipolazione dei feed RSS e Atom
   * `sfThumbnailPlugin`: Crea miniature, ad esempio per le immagini caricate da web
@@ -436,11 +436,11 @@ Listato 17-12 - Installare un plugin con alcune opzioni
     $ php symfony plugin:install --install-deps nomePlugin
 
 >**TIP**
->Come per ogni task di symfony, si può avere una spiegazione completa delle opzioni e degli argomenti di `plugin:install` lanciando `php symfony help plugin:install`.
+>Come per ogni task di symfony, si può avere una spiegazione completa delle opzioni e dei parametri di `plugin:install` lanciando `php symfony help plugin:install`.
 
 #### Plugin come archivio di file
 
-Alcuni plugin escono come semplici archivi di file. Per installarli, basta scompattare l'archivio nella cartella `plugins/` del progetto. Se il plugin contiene una sotto cartella `web/`, non dimenticarsi di lanciare il comando `plugin:publish-assets` per creare il corrispondente link simbolico sotto la cartella principale `web/` come mostrato nel listato 17-13. In ultimo cancellare la cache.
+Alcuni plugin sono distribuiti come semplici archivi di file. Per installarli, basta scompattare l'archivio nella cartella `plugins/` del progetto. Se il plugin contiene una sotto cartella `web/`, non dimenticarsi di lanciare il comando `plugin:publish-assets` per creare il corrispondente link simbolico sotto la cartella principale `web/`, come mostrato nel listato 17-13. In ultimo cancellare la cache.
 
 Listato 17-13 - Installare un plugin da un archivio
 
@@ -454,7 +454,7 @@ Listato 17-13 - Installare un plugin da un archivio
 
 I plugin a volte hanno il loro repository per il controllo di versione del codice sorgente. Si può installarli facendo un semplice checkout nella cartella `plugins/`, ma questo può essere un problema se anche il progetto stesso e sotto controllo di versione.
 
-In alternativa, si può dichiarare il plugin come dipendenza esterna, così che ogni aggiornamento del codice sorgente del proprio progetto, aggiorni anche il codice sorgente del plugin. Ad esempio, Subversion memorizza le dipendenze esterne  nella proprietà `svn:externals`. Quindi si può aggiungere un plugin, modificando questa proprietà e aggiornando in seguito il proprio codice sorgente, come illustra il listato 17-14.
+In alternativa, si può dichiarare il plugin come dipendenza esterna, così che ogni aggiornamento del codice sorgente del proprio progetto aggiorni anche il codice sorgente del plugin. Ad esempio, Subversion memorizza le dipendenze esterne nella proprietà `svn:externals`. Quindi si può aggiungere un plugin modificando questa proprietà e aggiornando in seguito il proprio codice sorgente, come illustra il listato 17-14.
 
 Listato 17-14 - Installare un plugin da un repository per il versionamento del codice sorgente
 
@@ -466,7 +466,7 @@ Listato 17-14 - Installare un plugin da un repository per il versionamento del c
     $ php symfony cc
 
 >**NOTE**
->Se il plugin contiene una cartella `web/`, deve essere lanciato il comando di symfony `plugin:publish-assets` in modo da generare il corrispondente link simbolico sotto la cartella `web/` principale del progetto.
+>Se il plugin contiene una cartella `web/`, deve essere lanciato il comando di symfony `plugin:publish-assets`, in modo da generare il corrispondente link simbolico sotto la cartella `web/` principale del progetto.
 
 #### Attivare il modulo di un plugin
 
@@ -478,7 +478,7 @@ Listato 17-15 - Attivazione del modulo di un plugin, in `frontend/config/setting
       .settings:
         enabled_modules:  [default, sfMyPluginModule]
 
-Questo per evitare una situazione in cui il modulo di un plugin è erroneamente reso disponibile per una applicazione che non lo richiede, che potrebbe aprire un buco nella sicurezza. Pensiamo a un plug-in che fornisce i moduli `frontend` e `backend`. Sarà necessario abilitare il modulo `frontend` solo nell'applicazione `frontend` e il modulo `backend` solo nell'applicazione `backend`. Questo è il motivo per cui i moduli dei plug-in, nella modalità predefinita non sono attivati.
+Questo per evitare una situazione in cui il modulo di un plugin è erroneamente reso disponibile per una applicazione che non lo richiede, che potrebbe aprire un buco nella sicurezza. Pensiamo a un plugin che fornisce i moduli `frontend` e `backend`. Sarà necessario abilitare il modulo `frontend` solo nell'applicazione `frontend` e il modulo `backend` solo nell'applicazione `backend`. Questo è il motivo per cui i moduli dei plugin, nella modalità predefinita non sono attivati.
 
 >**TIP**
 >Il modulo default è l'unico modulo che viene abilitato in modalità predefinita. In realtà non è un vero modulo di plugin, perché risiede nel framework, in `sfConfig::get('sf_symfony_lib_dir')/controller/default/`. È il modulo che fornisce le pagine di congratulazioni e le pagine di errore predefinite per gli errori 404 e la richiesta credenziali. Se non si desidera utilizzare le pagine predefinite di symfony, è sufficiente rimuovere il modulo dall'impostazione `enabled_modules`.
@@ -560,27 +560,27 @@ Listato 17-18 - La strutura dei file di un plugin
 
 I plugin possono contenere molte cose. Il loro contenuto è automaticamente preso in considerazione dall'applicazione in fase di runtime e quando si chiamano i task tramite riga di comando. Ma perché i plugin funzionino correttamente, è necessario rispettare alcune convenzioni:
 
-  * Gli schemi per il database vengono rilevati dai task `propel-`. Quando nel proprio progetto si chiamano `propel:build --classes` o `doctrine:build --classes`, si ricreano i modelli del progetto e con esso tutti i modelli dei plug-in. Si noti che lo schema di un plugin Propel deve sempre avere un attributo package sotto forma di `plugins.nomePlugin`. `lib.model`, come mostrato nel listato 17-19. Se si utilizza Doctrine, il task di genererà automaticamente le classi nella cartella dei plugin.
+  * Gli schemi per il database vengono rilevati dai task `propel-`. Quando nel proprio progetto si chiamano `propel:build --classes` o `doctrine:build --classes`, si ricreano i modelli del progetto e con esso tutti i modelli dei plugin. Si noti che lo schema di un plugin Propel deve sempre avere un attributo package sotto forma di `plugins.nomePlugin`. `lib.model`, come mostrato nel listato 17-19. Se si utilizza Doctrine, il task di genererà automaticamente le classi nella cartella dei plugin.
 
 Listato 17-19 - Esempio della dichiarazione di uno schema di Propel in un plugin, in `mioPlugin/config/schema.yml`
 
     propel:
       _attributes:    { package: plugins.mioPlugin.lib.model }
-      my_plugin_foobar:
-        _attributes:    { phpName: mioPluginFoobar }
+      mio_plugin_pippo:
+        _attributes:    { phpName: mioPluginPippo }
           id:
           name:           { type: varchar, size: 255, index: unique }
           ...
 
-  * La configurazione del plug-in deve essere presente nella classe di configurazione del plug-in (`NomePluginConfiguration.class.php`). Questo file viene eseguito dopo la configurazione dell'applicazione e del progetto, in modo da symfony a quel punto sia già inizializzato. È possibile utilizzare questo file, per esempio, per estendere classi esistenti con ascoltatori di eventi e comportamenti.
+  * La configurazione del plugin deve essere presente nella classe di configurazione del plugin (`NomePluginConfiguration.class.php`). Questo file viene eseguito dopo la configurazione dell'applicazione e del progetto, in modo da symfony a quel punto sia già inizializzato. È possibile utilizzare questo file, per esempio, per estendere classi esistenti con ascoltatori di eventi e comportamenti.
   * I file con le fixture che si trovano nella cartella `data/fixtures/` del plugin vengono analizzati dai task `propel:data-load` o `doctrine:data-load`.
   * Le classi personalizzate sono autocaricate proprio come quelle che si mettono nelle cartelle `lib/` del proprio progetto.
   * Gli helper vengono trovati automaticamente quando si chiama `use_helper()` nei template. Essi devono essere in una sotto cartella `helper/` di una delle cartelle `lib/` del plugin.
-  * Se si usa Propel, le classi del modello in `myplugin/lib/model/` specializzano le classi del modello generate dal generatore di Propel (in `myplugin/lib/model/om/` and `myplugin/lib/model/map/`) . Essi sono, ovviamente, caricate automaticamente. Bisogna essere a conoscenza che non è possibile sovrascrivere le classi del modello generato di un plug-in, nelle cartelle del proprio progetto.
+  * Se si usa Propel, le classi del modello in `myplugin/lib/model/` specializzano le classi del modello generate dal generatore di Propel (in `myplugin/lib/model/om/` and `myplugin/lib/model/map/`) . Essi sono, ovviamente, caricate automaticamente. Bisogna essere a conoscenza che non è possibile sovrascrivere le classi del modello generato di un plugin, nelle cartelle del proprio progetto.
   * Se si usa Doctrine, l'ORM genera le classi base dei plugin in `myplugin/lib/model/Plugin*. class.php` e le classi reali in `lib/model/myplugin/`. Questo significa che si possono sovrascrivere facilmente le classi del modello nella propria applicazione.
-  * I task sono immediatamente disponibili per la riga di comando di symfony non appena il plug-in viene installato. Un plugin può aggiungere nuovi task o sovrascriverne uno esistente. È buona pratica usare il nome del plugin come spazio dei nomi per il task. Digitare `php symfony` per visualizzare l'elenco dei task disponibili, inclusi quelli aggiunti dai plugin.
+  * I task sono immediatamente disponibili per la riga di comando di symfony non appena il plugin viene installato. Un plugin può aggiungere nuovi task o sovrascriverne uno esistente. È buona pratica usare il nome del plugin come spazio dei nomi per il task. Digitare `php symfony` per visualizzare l'elenco dei task disponibili, inclusi quelli aggiunti dai plugin.
   * I moduli forniscono nuove azioni accessibili dall'esterno, a condizione che li si dichiari impostandoli in `enabled_modules` nell'applicazione.
-  * Le risorse web (immagini, script, fogli di stile, ecc) sono messe a disposizione del server. Quando si installa un plug-in tramite la riga di comando, symfony crea un link simbolico alla cartella `web/` del progetto, se il sistema lo consente, o copia il contenuto della cartella `web/` del modulo nel progetto. Se il plugin è installato da un archivio o un repository di controllo della versione, è necessario copiare la cartella `web/` del plugin a mano (come dovrebbe indicare il file `README` incluso nel plug-in).
+  * Le risorse web (immagini, script, fogli di stile, ecc) sono messe a disposizione del server. Quando si installa un plugin tramite la riga di comando, symfony crea un link simbolico alla cartella `web/` del progetto, se il sistema lo consente, o copia il contenuto della cartella `web/` del modulo nel progetto. Se il plugin è installato da un archivio o un repository di controllo della versione, è necessario copiare la cartella `web/` del plugin a mano (come dovrebbe indicare il file `README` incluso nel plugin).
 		  
 
 
@@ -607,7 +607,7 @@ Listato 17-19 - Esempio della dichiarazione di uno schema di Propel in un plugin
 
 Ci sono alcuni elementi che il task `plugin:install` non può gestire da solo e che richiedono una impostazione manuale durante l'installazione:
 
-  * Configurazione personalizzate dell'applicazione possono essere utilizzate nel codice del plugin (ad esempio, utilizzando `sfConfig::get('app_myplugin_foo')`), ma non si possono mettere i valori predefiniti in un file `app.yml` che si trova nella cartella `config/` del plugin. Per gestire i valori predefiniti, si usa il secondo argomento del metodo `sfConfig::get()`. Le impostazioni possono comunque essere sovrascritte a livello di applicazione (vedere il listato 17-25 per un esempio).
+  * Configurazione personalizzate dell'applicazione possono essere utilizzate nel codice del plugin (ad esempio, utilizzando `sfConfig::get('app_myplugin_foo')`), ma non si possono mettere i valori predefiniti in un file `app.yml` che si trova nella cartella `config/` del plugin. Per gestire i valori predefiniti, si usa il secondo parametro del metodo `sfConfig::get()`. Le impostazioni possono comunque essere sovrascritte a livello di applicazione (vedere il listato 17-25 per un esempio).
   * Le regole personalizzate delle rotte devono essere aggiunte manualmente nel file `routing.yml` dell'applicazione.
   * I filtri personalizzati devono essere aggiunti manualmente nel file `filters.yml` dell'applicazione.
   * I factory personalizzati devono essere aggiunti manualmente nel file `factories.yml` dell'applicazione.
@@ -616,7 +616,7 @@ In generale, tutta la configurazione che dovrebbe finire in uno dei file di conf
 
 #### Personalizzare un plugin per una applicazione
 
-Ogni volta che si desidera personalizzare un plug-in, non modificare mai il codice che si trova nella cartella `plugins/`. Se lo si fa, quando si aggiorna il plugin si perderanno tutte le modifiche. Per esigenze di personalizzazione, i plugin forniscono impostazioni personalizzate e supportano la sovrascrittura del codice.
+Ogni volta che si desidera personalizzare un plugin, non modificare mai il codice che si trova nella cartella `plugins/`. Se lo si fa, quando si aggiorna il plugin si perderanno tutte le modifiche. Per esigenze di personalizzazione, i plugin forniscono impostazioni personalizzate e supportano la sovrascrittura del codice.
 
 I plugin ben progettati permettono di usare impostazioni che possono essere modificate nel file `app.yml` dell'applicazione, come dimostra il listato 17-20.
 
@@ -624,7 +624,7 @@ Listato 17-20 - Personalizzazione di un plugin che usa la configurazione dell'ap
 
     [php]
     // esempio di codice del plugin
-    $foo = sfConfig::get('app_my_plugin_foo', 'bar');
+    $foo = sfConfig::get('app_mio_plugin_foo', 'bar');
 
     // Cambiare il valore di 'foo' predefinito ('bar') nel file app.yml dell'applicazione
     all:
@@ -640,8 +640,8 @@ D'altra parte, se un plugin vuole mettere a disposizione un modulo che abbia la 
 Listato 17-21 - Personalizzare l'azione di un plugin
 
     [php]
-    // In mioPlugin/modules/mymodule/lib/mioPluginmymoduleActions.class.php
-    class mioPluginmymoduleActions extends sfActions
+    // In mioPlugin/modules/mymodule/lib/mioPluginMioModuloeActions.class.php
+    class mioPluginMioModuloActions extends sfActions
     {
       public function executeIndex()
       {
@@ -649,17 +649,17 @@ Listato 17-21 - Personalizzare l'azione di un plugin
       }
     }
 
-    // In mioPlugin/modules/mymodule/actions/actions.class.php
+    // In mioPlugin/modules/miomodulo/actions/actions.class.php
 
-    require_once dirname(__FILE__).'/../lib/mioPluginmymoduleActions.class.php';
+    require_once dirname(__FILE__).'/../lib/mioPluginMioModuloActions.class.php';
 
-    class mymoduleActions extends mioPluginmymoduleActions
+    class mioModuloActions extends mioPluginiMioModuloActions
     {
       // Niente
     }
 
-    // In frontend/modules/mymodule/actions/actions.class.php
-    class mymoduleActions extends mioPluginmymoduleActions
+    // In frontend/modules/miomodulo/actions/actions.class.php
+    class miomoduloActions extends mioPluginiMioModuloActions
     {
       public function executeIndex()
       {
@@ -697,7 +697,7 @@ Listato 17-21 - Personalizzare l'azione di un plugin
 >Nome originale dello schema             | Nome dello schema personalizzato
 >--------------------------------------- | --------------------------------
 >config/schema.yml                       | schema.custom.yml
->config/foobar_schema.yml                | foobar_schema.custom.yml
+>config/pippo_schema.yml                 | pippo_schema.custom.yml
 >plugins/mioPlugin/config/schema.yml     | mioPlugin-schema.custom.yml
 >plugins/mioPlugin/config/foo_schema.yml | mioPlugin_foo-schema.custom.yml
 >
@@ -891,11 +891,11 @@ Nel tag `<contents>` bisogna descrivere la struttura dei file del plugin. In que
 
 #### Dipendenze del plugin
 
-I plug-in sono progettati per funzionare con un dato insieme di versioni di PHP, PEAR, symfony, pacchetti PEAR, o altri plugin. Dichiarare queste dipendenze nel tag <dependencies>` chiede a PEAR di verificare che i pacchetti richiesti siano già installati e di sollevare un'eccezione in caso contrario.
+I plugin sono progettati per funzionare con un dato insieme di versioni di PHP, PEAR, symfony, pacchetti PEAR, o altri plugin. Dichiarare queste dipendenze nel tag <dependencies>` chiede a PEAR di verificare che i pacchetti richiesti siano già installati e di sollevare un'eccezione in caso contrario.
 
 È sempre necessario dichiarare le dipendenze da PHP, PEAR e symfony, almeno quelle corrispondenti alla propria installazione, come requisito minimo. Se non si sa cosa mettere, aggiungere un requisito per PHP 5.2.4, PEAR 1.4 e symfony 1.3.
 
-Si raccomanda inoltre di aggiungere un numero massimo di versione symfony per ogni plugin. Ciò causerà un messaggio di errore quando si tenta di utilizzare un plugin con una versione più avanzata del framework e questo obbligherà l'autore del plugin ad assicurarsi che il plug-in funzioni correttamente con questa versione prima del nuovo rilascio. È meglio avere una segnalazione e scaricare un aggiornamento piuttosto che avere un plugin che fallisce silenziosamente.
+Si raccomanda inoltre di aggiungere un numero massimo di versione symfony per ogni plugin. Ciò causerà un messaggio di errore quando si tenta di utilizzare un plugin con una versione più avanzata del framework e questo obbligherà l'autore del plugin ad assicurarsi che il plugin funzioni correttamente con questa versione prima del nuovo rilascio. È meglio avere una segnalazione e scaricare un aggiornamento piuttosto che avere un plugin che fallisce silenziosamente.
 
 Se si specificano plugin come dipendenze, gli utenti saranno in grado di installare il plugin e tutte le sue dipendenze con un singolo comando:
 
@@ -987,8 +987,8 @@ I plugin devono sempre includere un file `LICENSE` che descrive le condizioni di
 Riepilogo
 ---------
 
-Le classi di symfony notificano eventi che danno loro la possibilità di essere modificati a livello di applicazione. Il meccanismo degli eventi permette l'ereditarietà multipla e la sovrascrittura delle classi in fase di runtime, anche se le limitazioni di PHP lo impedirebbero. Quindi le funzionalità di symfony si possono estendere facilmente, anche quando è necessario modificare le classi core: la configurazione dei factory è qui per questo.
+Le classi di symfony notificano eventi che danno loro la possibilità di essere modificati a livello di applicazione. Il meccanismo degli eventi permette l'ereditarietà multipla e la sovrascrittura delle classi in fase di runtime, anche se le limitazioni di PHP lo impedirebbero. Quindi le funzionalità di symfony si possono estendere facilmente, anche quando è necessario modificare le classi del nucleo: la configurazione dei factory è qui per questo.
 
 Molte estensioni esistono già, sono pacchettizzate come plugin, per essere installate facilmente, aggiornate e disinstallate tramite la riga di comando di symfony. Creare un plugin è facile come creare un pacchetto PEAR e fornisce riutilizzabilità tra le applicazioni.
 
-La sezione plugin del sito di symfony contiene molti plugin e si possono anche aggiungere i propri. Quindi, ora che si sa come fare, speriamo che si aggiungano al core di symfony un sacco di estensioni utili!
+La sezione plugin del sito di symfony contiene molti plugin e si possono anche aggiungere i propri. Quindi, ora che si sa come fare, speriamo che si aggiungano al nucleo di symfony un sacco di estensioni utili!
